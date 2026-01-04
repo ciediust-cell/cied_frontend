@@ -6,97 +6,100 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
-const logo =
-  " [url=https://ibb.co/WvkTGK40][img]https://i.ibb.co/HTtJBgfC/cied-logo.jpg[/img][/url]";
+import { Link } from "react-router-dom";
+import ciedLogo from "/ciedLogo.jpeg";
 
 export function Footer() {
   return (
     <footer className="bg-primary text-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-          {/* About */}
-          <div>
-            <img
-              src={logo}
-              alt="CIED IUST"
-              className="h-12 w-auto mb-4 brightness-0 invert"
-            />
-            <p className="text-white/70 text-sm leading-relaxed">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-12 mb-12">
+          {/* Logo + About */}
+          <div className="space-y-4">
+            <Link to="/" className="inline-flex">
+              <img
+                src={ciedLogo}
+                alt="CIED IUST Foundation"
+                className="h-11 sm:h-14 w-auto"
+              />
+            </Link>
+            <p className="text-white/70 text-sm leading-relaxed max-w-sm">
               Empowering innovation and entrepreneurship at Islamic University
-              of Science and Technology, building Kashmir's startup ecosystem.
+              of Science and Technology, building Kashmir&apos;s startup
+              ecosystem.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="mb-4">Quick Links</h4>
+            <h4 className="mb-4 text-lg">Quick Links</h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <a
-                  href="#about"
+                <Link
+                  to="/aboutUs"
                   className="text-white/70 hover:text-secondary transition-colors"
                 >
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#programs"
+                <Link
+                  to="/programs"
                   className="text-white/70 hover:text-secondary transition-colors"
                 >
                   Programs
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#updates"
-                  className="text-white/70 hover:text-secondary transition-colors"
-                >
-                  Updates
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#news"
+                <Link
+                  to="/newsEvents"
                   className="text-white/70 hover:text-secondary transition-colors"
                 >
                   News & Events
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#gallery"
+                <Link
+                  to="/portfolio"
                   className="text-white/70 hover:text-secondary transition-colors"
                 >
-                  Gallery
-                </a>
+                  Portfolio
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/contactUs"
+                  className="text-white/70 hover:text-secondary transition-colors"
+                >
+                  Contact
+                </Link>
               </li>
             </ul>
           </div>
 
           {/* Resources */}
           <div>
-            <h4 className="mb-4">Resources</h4>
+            <h4 className="mb-4 text-lg">Resources</h4>
             <ul className="space-y-3 text-sm">
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="#apply"
                   className="text-white/70 hover:text-secondary transition-colors"
                 >
                   Apply Now
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="#mentors"
                   className="text-white/70 hover:text-secondary transition-colors"
                 >
                   Mentor Network
-                </a>
+                </Link>
               </li>
               <li>
                 <a
-                  href="#"
+                  href="#success-stories"
                   className="text-white/70 hover:text-secondary transition-colors"
                 >
                   Success Stories
@@ -104,18 +107,10 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="#faq"
                   className="text-white/70 hover:text-secondary transition-colors"
                 >
                   FAQs
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-white/70 hover:text-secondary transition-colors"
-                >
-                  Contact
                 </a>
               </li>
             </ul>
@@ -123,10 +118,10 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="mb-4">Get in Touch</h4>
+            <h4 className="mb-4 text-lg">Get in Touch</h4>
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 text-secondary flex-shrink-0 mt-0.5" />
+                <MapPin className="h-5 w-5 text-secondary mt-0.5 flex-shrink-0" />
                 <span className="text-white/70">
                   Islamic University of Science & Technology, Awantipora,
                   Kashmir
@@ -134,38 +129,51 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-secondary flex-shrink-0" />
-                <span className="text-white/70">+91 1234 567 890</span>
+                <a
+                  href="tel:+911933247955"
+                  className="text-white/70 hover:text-secondary transition-colors"
+                >
+                  +91 1933 247955
+                </a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-secondary flex-shrink-0" />
-                <span className="text-white/70">contact@cied-iust.edu</span>
+                <a
+                  href="mailto:cied@iust.ac.in"
+                  className="text-white/70 hover:text-secondary transition-colors"
+                >
+                  cied@iust.ac.in
+                </a>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-white/70">
+        <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-xs sm:text-sm text-white/70 text-center sm:text-left">
             © 2025 CIED IUST Foundation. All rights reserved.
           </p>
 
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             <a
               href="#"
-              className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-secondary transition-colors"
+              className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary transition-colors"
+              aria-label="Instagram"
             >
               <Instagram className="h-5 w-5" />
             </a>
             <a
               href="#"
-              className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-secondary transition-colors"
+              className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary transition-colors"
+              aria-label="Twitter"
             >
               <Twitter className="h-5 w-5" />
             </a>
             <a
               href="#"
-              className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-secondary transition-colors"
+              className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary transition-colors"
+              aria-label="LinkedIn"
             >
               <Linkedin className="h-5 w-5" />
             </a>

@@ -42,17 +42,14 @@ export function CTASection() {
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
               <div className="text-3xl mb-2">📧</div>
               <div className="text-sm opacity-70 mb-1">Email Us</div>
-              <div className="text-sm">contact@cied-iust.edu</div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
               <div className="text-3xl mb-2">📞</div>
               <div className="text-sm opacity-70 mb-1">Call Us</div>
-              <div className="text-sm">+91 1234 567 890</div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
               <div className="text-3xl mb-2">📍</div>
               <div className="text-sm opacity-70 mb-1">Visit Us</div>
-              <div className="text-sm">IUST Campus, Kashmir</div>
             </div>
           </div>
         </div>

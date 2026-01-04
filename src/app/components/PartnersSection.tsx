@@ -1,4 +1,4 @@
-import { RotatingTypewriterHeading } from "src/hooks/RotatingTypewriterHeading";
+import { RotatingTypewriterHeading } from "src/helper/RotatingTypewriterHeading";
 import { Card, CardContent } from "./ui/card";
 import { Quote } from "lucide-react";
 

@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Header } from "../app/components/Header";
-import { Footer } from "../app/components/Footer";
+import { motion } from "framer-motion";
 import { FilterBar } from "../app/components/news/FilterBar";
 import { FeaturedCard } from "../app/components/news/FeaturedCard";
 import { NewsGrid } from "../app/components/news/NewsGrid";
@@ -8,6 +7,8 @@ import { NewsDetailModal } from "../app/components/news/NewsDetailModal";
 import { Button } from "../app/components/ui/button";
 import { Mail } from "lucide-react";
 import { EventCalendar } from "src/app/components/news/EventCalender";
+import { fadeUp, staggerContainer } from "src/helper/animations";
+import { HostEvent } from "src/app/components/news/HostEvent";
 
 export interface NewsItem {
   id: string;
@@ -195,6 +196,7 @@ export function NewsEventsPage() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
   const [displayCount, setDisplayCount] = useState<number>(9);
+
   const calendarEvents = newsData.filter((item) => item.category === "Event");
 
   const filteredNews = newsData.filter((item) => {
@@ -214,87 +216,164 @@ export function NewsEventsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      <main className="pt-20">
-        {/* Page Title Section */}
-        <section className="bg-gradient-to-b from-primary/5 to-white py-16">
+    <div className="min-h-screen bg-white overflow-x-hidden">
+      {/* added overflow-x-hidden for mobile */}
+      <main className="pt-16 sm:pt-20">
+        {/* reduced top padding on mobile */}
+
+        {/* ---------------- PAGE TITLE ---------------- */}
+        <section className="bg-gradient-to-b from-primary/5 to-white py-12 sm:py-16">
+          {/* tighter vertical spacing on mobile */}
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl sm:text-5xl mb-4 text-primary">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              animate="visible"
+              className="max-w-3xl mx-auto text-center"
+            >
+              <motion.h1
+                variants={fadeUp}
+                className="text-3xl sm:text-5xl mb-3 sm:mb-4 text-primary"
+              >
                 News & Events
-              </h1>
-              <p className="text-lg text-muted-foreground">
+              </motion.h1>
+
+              <motion.p
+                variants={fadeUp}
+                className="text-base sm:text-lg text-muted-foreground"
+              >
                 Latest updates, announcements, workshops, and activities from
                 CIED IUST
-              </p>
-            </div>
+              </motion.p>
+            </motion.div>
           </div>
         </section>
 
-        {/* Filter & Search Bar */}
-        <FilterBar
-          selectedCategory={selectedCategory}
-          onCategoryChange={setSelectedCategory}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-        />
-
-        {/* Featured Item */}
-        {featuredItem && selectedCategory === "All" && !searchQuery && (
-          <FeaturedCard
-            item={featuredItem}
-            onClick={() => setSelectedNews(featuredItem)}
+        {/* ---------------- EVENT CALENDAR ---------------- */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="px-4 sm:px-0 overflow-x-auto"
+          // {/* horizontal scroll safety for mobile */}
+        >
+          <EventCalendar
+            events={calendarEvents}
+            onEventClick={(event) => setSelectedNews(event)}
           />
+        </motion.div>
+
+        {/* ---------------- FILTER BAR ---------------- */}
+        <div className="px-4 sm:px-0">
+          {/* ensures filter bar has side padding on mobile */}
+          <FilterBar
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+          />
+        </div>
+
+        {/* ---------------- FEATURED CARD ---------------- */}
+        {featuredItem && selectedCategory === "All" && !searchQuery && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="px-4 sm:px-0"
+            // {/* added padding so card doesn’t touch edges */}
+          >
+            <FeaturedCard
+              item={featuredItem}
+              onClick={() => setSelectedNews(featuredItem)}
+            />
+          </motion.div>
         )}
-        {/* Event Calendar */}
-        <EventCalendar
-          events={calendarEvents}
-          onEventClick={(event) => setSelectedNews(event)}
-        />
 
-        {/* News Grid */}
-        <NewsGrid items={displayedNews} onItemClick={setSelectedNews} />
+        {/* ---------------- NEWS GRID ---------------- */}
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="px-4 sm:px-0"
+          // {/* padding for mobile grid */}
+        >
+          <NewsGrid items={displayedNews} onItemClick={setSelectedNews} />
+        </motion.div>
 
-        {/* Load More Button */}
+        {/* ---------------- LOAD MORE ---------------- */}
         {displayedNews.length < filteredNews.length && (
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-            <div className="text-center">
-              <Button
-                onClick={handleLoadMore}
-                size="lg"
-                variant="outline"
-                className="border-2 border-primary text-primary hover:bg-primary hover:text-white"
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center"
+            >
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
               >
-                Load More
-              </Button>
-            </div>
+                <Button
+                  onClick={handleLoadMore}
+                  size="lg"
+                  variant="outline"
+                  className="w-full sm:w-auto border-2 border-primary text-primary hover:bg-primary hover:text-white"
+                  // {/* full-width button on mobile */}
+                >
+                  Load More
+                </Button>
+              </motion.div>
+            </motion.div>
           </div>
         )}
 
-        {/* CTA Section */}
-        <section className="py-16 bg-gradient-to-br from-primary/5 to-accent/5">
+        <HostEvent />
+        {/* ---------------- CTA SECTION ---------------- */}
+        <section className="py-12 sm:py-16 bg-gradient-to-br from-primary/5 to-accent/5">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl mx-auto text-center">
-              <h2 className="text-3xl mb-4 text-primary">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="max-w-2xl mx-auto text-center"
+            >
+              <motion.h2
+                variants={fadeUp}
+                className="text-2xl sm:text-3xl mb-3 sm:mb-4 text-primary"
+              >
                 Stay Updated with the Latest from CIED
-              </h2>
-              <p className="text-muted-foreground mb-6">
+              </motion.h2>
+
+              <motion.p
+                variants={fadeUp}
+                className="text-sm sm:text-base text-muted-foreground mb-6"
+              >
                 Subscribe to our newsletter to receive updates on events, news,
                 and opportunities.
-              </p>
-              <Button size="lg" className="bg-primary hover:bg-primary/90">
-                <Mail className="mr-2 h-5 w-5" />
-                Subscribe
-              </Button>
-            </div>
+              </motion.p>
+
+              <motion.div
+                variants={fadeUp}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto bg-primary hover:bg-primary/90"
+                >
+                  <Mail className="mr-2 h-5 w-5" />
+                  Subscribe
+                </Button>
+              </motion.div>
+            </motion.div>
           </div>
         </section>
       </main>
-
-      <Footer />
-
-      {/* Detail Modal */}
+      {/* ---------------- DETAIL MODAL ---------------- */}
       {selectedNews && (
         <NewsDetailModal
           item={selectedNews}

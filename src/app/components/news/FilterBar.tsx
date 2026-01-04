@@ -17,16 +17,18 @@ export function FilterBar({
   onSearchChange,
 }: FilterBarProps) {
   return (
-    <section className="py-8 border-b border-border bg-white sticky top-20 z-40">
+    <section className="py-4 sm:py-6 border-b border-border bg-white sticky top-16 sm:top-20 z-40">
+      {/* reduced height & fixed sticky offset for mobile */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          {/* Category Filter Pills */}
-          <div className="flex flex-wrap gap-2">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          {/* CATEGORY FILTER */}
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+            {/* horizontal scroll instead of wrapping on mobile */}
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => onCategoryChange(category)}
-                className={`px-4 py-2 rounded-lg transition-all ${
+                className={`whitespace-nowrap px-3 sm:px-4 py-2 rounded-lg text-sm transition-all ${
                   selectedCategory === category
                     ? "bg-primary text-white"
                     : "bg-muted text-foreground hover:bg-muted/80"
@@ -37,7 +39,7 @@ export function FilterBar({
             ))}
           </div>
 
-          {/* Search Input */}
+          {/* SEARCH */}
           <div className="relative w-full md:w-80">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -45,7 +47,7 @@ export function FilterBar({
               placeholder="Search news & events..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-10 bg-input-background border-border"
+              className="pl-10 bg-input-background border-border text-sm"
             />
           </div>
         </div>

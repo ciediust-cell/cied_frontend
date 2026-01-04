@@ -1,7 +1,7 @@
 import { Button } from "./ui/button";
 import { ArrowRight, Target, Eye } from "lucide-react";
-import { useInViewOnce } from "../../hooks/useInViewOnce";
-import { TypewriterText } from "src/hooks/TypeWriterText";
+import { useInViewOnce } from "../../helper/useInViewOnce";
+import { TypewriterText } from "src/helper/TypeWriterText";
 
 export function AboutSection() {
   const [titleRef, titleVisible] = useInViewOnce();
