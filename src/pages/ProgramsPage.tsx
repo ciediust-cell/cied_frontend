@@ -1,5 +1,3 @@
-import { CTASection } from "src/app/components/CTASection";
-
 import { ApplicationProcess } from "src/app/components/programs/ApplicationProcess";
 import { BookWorkspace } from "src/app/components/programs/BookWorkspace";
 import { Eligibility } from "src/app/components/programs/Eligiblity";

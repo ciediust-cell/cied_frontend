@@ -1,4 +1,3 @@
-import { CTASection } from "src/app/components/CTASection";
 import { ImpactHighlights } from "src/app/components/portfolio/ImpactHighlights";
 import { PortfolioHero } from "src/app/components/portfolio/PortfolioHero";
 import { PortfolioOverview } from "src/app/components/portfolio/PortfolioOverview";
