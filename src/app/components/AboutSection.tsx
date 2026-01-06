@@ -56,7 +56,7 @@ export function AboutSection() {
                   <h4 className="mb-2 text-primary">Our Vision</h4>
                   <p className="text-sm text-muted-foreground">
                     Be the catalyst for Kashmir's transformation into a thriving
-                    startup hub
+                    startup hub.
                   </p>
                 </div>
               </div>

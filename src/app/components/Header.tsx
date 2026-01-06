@@ -12,9 +12,9 @@ export function Header() {
     { name: "About", to: "/aboutUs" },
     { name: "Programs", to: "/programs" },
     { name: "News", to: "/newsEvents" },
-    { name: "Gallery", href: "/gallery" },
+    { name: "Gallery", to: "/gallery" },
     { name: "Portfolio", to: "/portfolio" },
-    { name: "Contact", href: "/contactUs" },
+    { name: "Contact", to: "/contactUs" },
   ];
 
   return (
