@@ -8,14 +8,14 @@ export function ProgramsHero() {
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          transition={{ duration: 0.6, ease: "easeOut" as const }}
           className="max-w-4xl mx-auto text-center"
         >
           {/* Icon */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.15, duration: 0.45, ease: "easeOut" }}
+            transition={{ delay: 0.15, duration: 0.45, ease: "easeOut" as const }}
             whileHover={{ scale: 1.05 }}
             className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-primary/10 rounded-2xl mb-5 sm:mb-6 mx-auto"
           >
@@ -26,7 +26,7 @@ export function ProgramsHero() {
           <motion.h1
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25, duration: 0.5, ease: "easeOut" }}
+            transition={{ delay: 0.25, duration: 0.5, ease: "easeOut" as const }}
             className="text-3xl sm:text-4xl lg:text-6xl mb-4 sm:mb-6 text-primary leading-tight"
           >
             Programs & Facilities
@@ -36,7 +36,7 @@ export function ProgramsHero() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35, duration: 0.5, ease: "easeOut" }}
+            transition={{ delay: 0.35, duration: 0.5, ease: "easeOut" as const }}
             className="text-base sm:text-lg lg:text-2xl text-muted-foreground leading-relaxed max-w-3xl mx-auto px-2 sm:px-0"
           >
             Structured programs designed to support startups at every stage of
@@ -47,3 +47,4 @@ export function ProgramsHero() {
     </section>
   );
 }
+

@@ -52,10 +52,26 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  to="/newsEvents"
+                  to="/members"
                   className="text-white/70 hover:text-secondary transition-colors"
                 >
-                  News & Events
+                  Members & Recognition
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/news"
+                  className="text-white/70 hover:text-secondary transition-colors"
+                >
+                  News
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/events"
+                  className="text-white/70 hover:text-secondary transition-colors"
+                >
+                  Events
                 </Link>
               </li>
               <li>

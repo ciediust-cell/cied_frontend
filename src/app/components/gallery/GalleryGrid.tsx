@@ -1,6 +1,10 @@
 import { Play } from "lucide-react";
 import { motion } from "framer-motion";
 import type { GalleryItem } from "./GalleryContent";
+import {
+  buildResponsiveCloudinarySrcSet,
+  getOptimizedCloudinaryUrl,
+} from "src/helper/imageOptimization";
 
 interface GalleryGridProps {
   items: GalleryItem[];
@@ -22,7 +26,7 @@ const itemVariants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.4, ease: "easeOut" },
+    transition: { duration: 0.4, ease: "easeOut" as const },
   },
 };
 
@@ -42,23 +46,42 @@ export function GalleryGrid({ items, onImageClick }: GalleryGridProps) {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-5 sm:gap-6"
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6"
     >
-      {items.map((item) => (
+      {items.map((item, index) => (
         <motion.div
           key={item.id}
           variants={itemVariants}
           whileHover={{ y: -4 }}
           whileTap={{ scale: 0.98 }}
-          className="mb-5 sm:mb-6 break-inside-avoid group relative cursor-pointer overflow-hidden rounded-xl border-2 border-border hover:border-primary/30 transition-all hover:shadow-lg"
+          className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-border hover:border-primary/30 transition-all hover:shadow-lg aspect-[4/3]"
           onClick={() => onImageClick(item)}
         >
           {/* Image */}
           <motion.img
-            src={item.imageUrl}
+            src={getOptimizedCloudinaryUrl(item.imageUrl, {
+              width: 640,
+              height: 480,
+              crop: "fill",
+              gravity: "auto",
+              quality: "auto:eco",
+            })}
+            srcSet={buildResponsiveCloudinarySrcSet(
+              item.imageUrl,
+              [240, 320, 480, 640, 800],
+              {
+                crop: "fill",
+                gravity: "auto",
+                aspectRatio: 4 / 3,
+                quality: "auto:eco",
+              }
+            )}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
             alt={item.title}
-            loading="lazy"
-            className="w-full h-auto object-cover"
+            loading={index < 4 ? "eager" : "lazy"}
+            fetchPriority={index < 4 ? "high" : "auto"}
+            decoding="async"
+            className="w-full h-full object-cover"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.35 }}
           />
@@ -103,3 +126,4 @@ export function GalleryGrid({ items, onImageClick }: GalleryGridProps) {
     </motion.div>
   );
 }
+

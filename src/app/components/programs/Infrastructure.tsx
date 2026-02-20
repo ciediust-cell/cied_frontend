@@ -63,7 +63,7 @@ const item = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: "easeOut" },
+    transition: { duration: 0.6, ease: "easeOut" as const },
   },
 };
 
@@ -129,7 +129,7 @@ export function Infrastructure() {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
+          transition={{ duration: 0.7, ease: "easeOut" as const }}
           className="rounded-2xl overflow-hidden shadow-xl"
         >
           <img
@@ -142,3 +142,4 @@ export function Infrastructure() {
     </section>
   );
 }
+

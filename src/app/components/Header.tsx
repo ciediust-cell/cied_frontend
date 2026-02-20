@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { Button } from "./ui/button";
 import ciedLogo from "/ciedLogo.jpeg";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,8 +9,10 @@ export function Header() {
 
   const navLinks = [
     { name: "About", to: "/aboutUs" },
+    { name: "Members", to: "/members" },
     { name: "Programs", to: "/programs" },
-    { name: "News", to: "/newsEvents" },
+    { name: "News", to: "/news" },
+    { name: "Events", to: "/events" },
     { name: "Gallery", to: "/gallery" },
     { name: "Portfolio", to: "/portfolio" },
     { name: "Contact", to: "/contactUs" },
@@ -33,39 +34,16 @@ export function Header() {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-8">
-              {navLinks.map((link, index) =>
-                link.to ? (
-                  <Link
-                    key={index}
-                    to={link.to}
-                    className="text-foreground hover:text-primary transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                ) : (
-                  <a
-                    key={index}
-                    href={link.href}
-                    className="text-foreground hover:text-primary transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                )
-              )}
+              {navLinks.map((link, index) => (
+                <Link
+                  key={index}
+                  to={link.to}
+                  className="text-foreground hover:text-primary transition-colors"
+                >
+                  {link.name}
+                </Link>
+              ))}
             </nav>
-
-            {/* Desktop Actions */}
-            <div className="hidden md:flex items-center gap-3">
-              <Button
-                variant="outline"
-                className="border-primary text-primary hover:bg-primary hover:text-white"
-              >
-                Login
-              </Button>
-              <Button className="bg-secondary hover:bg-secondary/90">
-                Apply Now
-              </Button>
-            </div>
 
             {/* Mobile Toggle */}
             <button
@@ -97,7 +75,7 @@ export function Header() {
               initial={{ y: -24, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -24, opacity: 0 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
+              transition={{ duration: 0.25, ease: "easeOut" as const }}
               className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-border"
             >
               <div className="flex items-center justify-between px-4 sm:px-6 h-16">
@@ -116,39 +94,17 @@ export function Header() {
               </div>
 
               <div className="px-6 py-6 flex flex-col gap-5">
-                {navLinks.map((link, index) =>
-                  link.to ? (
-                    <Link
-                      key={index}
-                      to={link.to}
-                      onClick={() => setMobileOpen(false)}
-                      className="text-lg text-primary hover:text-secondary transition-colors"
-                    >
-                      {link.name}
-                    </Link>
-                  ) : (
-                    <a
-                      key={index}
-                      href={link.href}
-                      onClick={() => setMobileOpen(false)}
-                      className="text-lg text-primary hover:text-secondary transition-colors"
-                    >
-                      {link.name}
-                    </a>
-                  )
-                )}
-
-                <div className="pt-4 border-t border-border flex flex-col gap-3">
-                  <Button
-                    variant="outline"
-                    className="border-primary text-primary hover:bg-primary hover:text-white w-full"
+                {navLinks.map((link, index) => (
+                  <Link
+                    key={index}
+                    to={link.to}
+                    onClick={() => setMobileOpen(false)}
+                    className="text-lg text-primary hover:text-secondary transition-colors"
                   >
-                    Login
-                  </Button>
-                  <Button className="bg-secondary hover:bg-secondary/90 w-full">
-                    Apply Now
-                  </Button>
-                </div>
+                    {link.name}
+                  </Link>
+                ))}
+
               </div>
             </motion.div>
           </>
@@ -157,3 +113,4 @@ export function Header() {
     </>
   );
 }
+

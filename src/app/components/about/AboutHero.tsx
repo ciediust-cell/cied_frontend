@@ -24,7 +24,7 @@ export function AboutHero() {
               visible: {
                 opacity: 1,
                 y: 0,
-                transition: { duration: 0.7, ease: "easeOut" },
+                transition: { duration: 0.7, ease: "easeOut" as const },
               },
             }}
             className="text-3xl sm:text-4xl lg:text-6xl mb-4 sm:mb-6 text-primary"
@@ -38,7 +38,7 @@ export function AboutHero() {
               visible: {
                 opacity: 1,
                 y: 0,
-                transition: { duration: 0.6, ease: "easeOut" },
+                transition: { duration: 0.6, ease: "easeOut" as const },
               },
             }}
             className="text-base sm:text-lg lg:text-2xl text-muted-foreground leading-relaxed px-2 sm:px-0"
@@ -53,7 +53,7 @@ export function AboutHero() {
           initial={{ opacity: 0, scale: 0.96 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
+          transition={{ duration: 0.7, ease: "easeOut" as const }}
           className="relative w-full max-w-5xl mx-auto rounded-xl sm:rounded-2xl overflow-hidden shadow-md sm:shadow-lg"
         >
           <img
@@ -69,3 +69,4 @@ export function AboutHero() {
     </section>
   );
 }
+

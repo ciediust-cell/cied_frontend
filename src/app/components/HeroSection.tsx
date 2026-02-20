@@ -2,6 +2,7 @@ import { Button } from "./ui/button";
 import { ArrowRight } from "lucide-react";
 import { CountUp } from "src/helper/CountUp";
 import { TypewriterHeading } from "src/helper/TypewriterHeading";
+import { Link } from "react-router-dom";
 
 export function HeroSection() {
   return (
@@ -43,19 +44,14 @@ export function HeroSection() {
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
             <Button
+              asChild
               size="lg"
-              className="bg-primary hover:bg-primary/90 text-white px-7 sm:px-8 py-5 sm:py-6 text-base sm:text-lg group w-full sm:w-auto"
+              className="bg-primary hover:bg-primary/90 text-white px-10 sm:px-12 py-6 sm:py-7 text-lg sm:text-xl group w-full sm:w-auto min-w-[230px]"
             >
-              Explore Programs
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-7 sm:px-8 py-5 sm:py-6 text-base sm:text-lg w-full sm:w-auto"
-            >
-              Learn More
+              <Link to="/programs">
+                Explore Programs
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </Button>
           </div>
 

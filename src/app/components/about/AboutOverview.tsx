@@ -26,7 +26,7 @@ export function AboutOverview() {
                 visible: {
                   opacity: 1,
                   y: 0,
-                  transition: { duration: 0.6, ease: "easeOut" },
+                  transition: { duration: 0.6, ease: "easeOut" as const },
                 },
               }}
               className="text-2xl sm:text-3xl lg:text-4xl text-primary"
@@ -62,7 +62,7 @@ export function AboutOverview() {
                       y: 0,
                       transition: {
                         duration: 0.5,
-                        ease: "easeOut",
+                        ease: "easeOut" as const,
                         delay: index * 0.05,
                       },
                     },
@@ -79,13 +79,13 @@ export function AboutOverview() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
+            transition={{ duration: 0.7, ease: "easeOut" as const }}
             className="relative"
           >
             <motion.div
               initial={{ scale: 0.96 }}
               whileInView={{ scale: 1 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
+              transition={{ duration: 0.6, ease: "easeOut" as const }}
               viewport={{ once: true }}
               className="rounded-xl sm:rounded-2xl overflow-hidden shadow-lg sm:shadow-xl"
             >
@@ -118,3 +118,4 @@ export function AboutOverview() {
     </section>
   );
 }
+

@@ -16,7 +16,7 @@ export default function Home() {
         <KeyHighlights />
         <AboutSection />
         <NewsEvents />
-        <RecentUpdates />
+        {/* <RecentUpdates /> */}
         <ProgramsSection />
         <GallerySection />
         <PartnersSection />

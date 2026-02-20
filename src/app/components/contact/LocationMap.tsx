@@ -11,14 +11,14 @@ export function LocationMap() {
             initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            transition={{ duration: 0.6, ease: "easeOut" as const }}
             className="text-center mb-8 sm:mb-10"
           >
             <motion.div
               initial={{ scale: 0.85, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.15, duration: 0.45, ease: "easeOut" }}
+              transition={{ delay: 0.15, duration: 0.45, ease: "easeOut" as const }}
               whileHover={{ scale: 1.05 }}
               className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-primary/10 rounded-xl mb-4 mx-auto"
             >
@@ -29,7 +29,7 @@ export function LocationMap() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.25, duration: 0.5, ease: "easeOut" }}
+              transition={{ delay: 0.25, duration: 0.5, ease: "easeOut" as const }}
               className="text-2xl sm:text-3xl lg:text-4xl text-primary mb-3"
             >
               Find Us Here
@@ -39,7 +39,7 @@ export function LocationMap() {
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.35, duration: 0.45, ease: "easeOut" }}
+              transition={{ delay: 0.35, duration: 0.45, ease: "easeOut" as const }}
               className="text-sm sm:text-base lg:text-lg text-muted-foreground"
             >
               Visit our incubation centre at IUST Campus, Awantipora
@@ -51,7 +51,7 @@ export function LocationMap() {
             initial={{ opacity: 0, scale: 0.97 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            transition={{ duration: 0.6, ease: "easeOut" as const }}
             whileHover={{ scale: 1.01 }}
             className="rounded-2xl overflow-hidden border-4 border-border shadow-lg"
           >
@@ -81,3 +81,4 @@ export function LocationMap() {
     </section>
   );
 }
+

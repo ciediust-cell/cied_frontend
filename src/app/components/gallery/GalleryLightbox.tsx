@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Play } from "lucide-react";
 import type { GalleryItem } from "./GalleryContent";
+import { getOptimizedCloudinaryUrl } from "src/helper/imageOptimization";
 
 interface GalleryLightboxProps {
   item: GalleryItem;
@@ -101,7 +102,7 @@ export function GalleryLightbox({
         <motion.div
           initial={{ scale: 0.96, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.35, ease: "easeOut" }}
+          transition={{ duration: 0.35, ease: "easeOut" as const }}
           className="relative max-w-7xl w-full flex flex-col items-center z-10"
         >
           {/* Media */}
@@ -109,7 +110,11 @@ export function GalleryLightbox({
             {item.type === "video" ? (
               <div className="relative">
                 <img
-                  src={item.imageUrl}
+                  src={getOptimizedCloudinaryUrl(item.imageUrl, {
+                    width: 1600,
+                    crop: "limit",
+                    quality: "auto:good",
+                  })}
                   alt={item.title}
                   className="max-h-[65vh] sm:max-h-[70vh] max-w-full object-contain rounded-lg"
                 />
@@ -124,7 +129,11 @@ export function GalleryLightbox({
               </div>
             ) : (
               <img
-                src={item.imageUrl}
+                src={getOptimizedCloudinaryUrl(item.imageUrl, {
+                  width: 1600,
+                  crop: "limit",
+                  quality: "auto:good",
+                })}
                 alt={item.title}
                 className="max-h-[65vh] sm:max-h-[70vh] max-w-full object-contain rounded-lg"
               />
@@ -153,3 +162,4 @@ export function GalleryLightbox({
     </AnimatePresence>
   );
 }
+

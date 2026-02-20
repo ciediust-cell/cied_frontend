@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { X, Calendar, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
-import type { NewsItem } from "../../../pages/NewsEventsPage";
+import type { NewsItem } from "src/types/news";
 
 interface NewsDetailModalProps {
   item: NewsItem;

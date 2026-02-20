@@ -1,7 +1,7 @@
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Calendar, MapPin, ArrowRight } from "lucide-react";
-import type { NewsItem } from "../../../pages/NewsEventsPage";
+import type { NewsItem } from "src/types/news";
 
 interface FeaturedCardProps {
   item: NewsItem;

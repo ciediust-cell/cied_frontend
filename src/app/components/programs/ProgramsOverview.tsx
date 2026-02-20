@@ -10,7 +10,7 @@ export function ProgramsOverview() {
             initial={{ opacity: 0, y: 32 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            transition={{ duration: 0.6, ease: "easeOut" as const }}
             className="space-y-5 sm:space-y-6"
           >
             <motion.h2
@@ -40,7 +40,7 @@ export function ProgramsOverview() {
                   initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.45, ease: "easeOut" }}
+                  transition={{ duration: 0.45, ease: "easeOut" as const }}
                 >
                   {text}
                 </motion.p>
@@ -53,7 +53,7 @@ export function ProgramsOverview() {
             initial={{ opacity: 0, scale: 0.96 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            transition={{ duration: 0.6, ease: "easeOut" as const }}
             className="relative mt-8 lg:mt-0"
           >
             <motion.div
@@ -89,3 +89,4 @@ export function ProgramsOverview() {
     </section>
   );
 }
+

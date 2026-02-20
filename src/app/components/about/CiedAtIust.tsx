@@ -38,14 +38,14 @@ export function CIEDAtIUST() {
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
+            transition={{ duration: 0.7, ease: "easeOut" as const }}
             className="order-2 lg:order-1"
           >
             <motion.div
               initial={{ scale: 0.96 }}
               whileInView={{ scale: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
+              transition={{ duration: 0.6, ease: "easeOut" as const }}
               className="rounded-xl sm:rounded-2xl overflow-hidden shadow-lg sm:shadow-xl"
             >
               <img
@@ -76,7 +76,7 @@ export function CIEDAtIUST() {
                 visible: {
                   opacity: 1,
                   y: 0,
-                  transition: { duration: 0.6, ease: "easeOut" },
+                  transition: { duration: 0.6, ease: "easeOut" as const },
                 },
               }}
             >
@@ -107,7 +107,7 @@ export function CIEDAtIUST() {
                         y: 0,
                         transition: {
                           duration: 0.5,
-                          ease: "easeOut",
+                          ease: "easeOut" as const,
                           delay: index * 0.05,
                         },
                       },
@@ -142,7 +142,7 @@ export function CIEDAtIUST() {
                 visible: {
                   opacity: 1,
                   y: 0,
-                  transition: { duration: 0.5, ease: "easeOut" },
+                  transition: { duration: 0.5, ease: "easeOut" as const },
                 },
               }}
               className="pt-4 border-t border-border"
@@ -161,3 +161,4 @@ export function CIEDAtIUST() {
     </section>
   );
 }
+

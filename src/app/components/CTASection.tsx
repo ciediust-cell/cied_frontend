@@ -1,5 +1,6 @@
+import { Link } from "react-router-dom";
+import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { Button } from "./ui/button";
-import { ArrowRight, Send } from "lucide-react";
 
 export function CTASection() {
   return (
@@ -23,32 +24,35 @@ export function CTASection() {
 
           <p className="text-xl mb-10 opacity-90 max-w-2xl mx-auto leading-relaxed">
             Whether you're a budding entrepreneur or an established startup
-            looking to scale, CIED IUST is here to support your journey. Let's
+            looking to scale, CIED IUST is here to support your journey. Let&apos;s
             build the future together.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button
+              asChild
               size="lg"
               className="bg-secondary hover:bg-secondary/90 text-white px-8 py-6 text-lg group"
             >
-              Get in Touch
-              <Send className="ml-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
+              <Link to="/contactUs">
+                Get in Touch
+                <Send className="ml-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
+              </Link>
             </Button>
           </div>
 
           {/* Contact Info Cards */}
           <div className="grid sm:grid-cols-3 gap-6 mt-16">
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-              <div className="text-3xl mb-2">📧</div>
+              <Mail className="h-8 w-8 mx-auto mb-2" />
               <div className="text-sm opacity-70 mb-1">Email Us</div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-              <div className="text-3xl mb-2">📞</div>
+              <Phone className="h-8 w-8 mx-auto mb-2" />
               <div className="text-sm opacity-70 mb-1">Call Us</div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-              <div className="text-3xl mb-2">📍</div>
+              <MapPin className="h-8 w-8 mx-auto mb-2" />
               <div className="text-sm opacity-70 mb-1">Visit Us</div>
             </div>
           </div>

@@ -2,9 +2,10 @@ import { Button } from "./ui/button";
 import { ArrowRight, Target, Eye } from "lucide-react";
 import { useInViewOnce } from "../../helper/useInViewOnce";
 import { TypewriterText } from "src/helper/TypeWriterText";
+import { Link } from "react-router-dom";
 
 export function AboutSection() {
-  const [titleRef, titleVisible] = useInViewOnce();
+  const [titleRef, titleVisible] = useInViewOnce<HTMLHeadingElement>();
 
   return (
     <section id="about" className="py-24 bg-white">
@@ -62,21 +63,23 @@ export function AboutSection() {
               </div>
             </div>
 
-            <Button className="bg-primary hover:bg-primary/90 group">
-              Read More About Us
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            <Button asChild className="bg-primary hover:bg-primary/90 group">
+              <Link to="/aboutUs">
+                Read More About Us
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </Button>
           </div>
 
           <div className="relative">
-            <div className="absolute -top-6 -left-6 w-full h-full border-4 border-secondary/20 rounded-2xl" />
+            <div className="absolute -top-3 -left-3 sm:-top-6 sm:-left-6 w-full h-full border-4 border-secondary/20 rounded-2xl" />
             <img
               src="https://images.unsplash.com/photo-1680226425348-cedaf70ec06d"
               alt="IUST Campus"
-              className="relative rounded-2xl shadow-2xl w-full h-[500px] object-cover"
+              className="relative rounded-2xl shadow-2xl w-full h-72 sm:h-[420px] lg:h-[500px] object-cover"
             />
-            <div className="absolute -bottom-8 -right-8 bg-primary text-white p-8 rounded-2xl shadow-xl">
-              <div className="text-4xl mb-2">5+</div>
+            <div className="absolute -bottom-4 -right-4 sm:-bottom-8 sm:-right-8 bg-primary text-white p-4 sm:p-8 rounded-2xl shadow-xl">
+              <div className="text-2xl sm:text-4xl mb-1 sm:mb-2">5+</div>
               <div className="text-sm">Years of Excellence</div>
             </div>
           </div>

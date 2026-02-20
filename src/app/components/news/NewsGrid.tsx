@@ -1,7 +1,7 @@
 import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Calendar, MapPin, ArrowRight } from "lucide-react";
-import type { NewsItem } from "../../../pages/NewsEventsPage";
+import type { NewsItem } from "src/types/news";
 
 interface NewsGridProps {
   items: NewsItem[];
@@ -27,7 +27,7 @@ export function NewsGrid({ items, onItemClick }: NewsGridProps) {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="text-center">
           <p className="text-base sm:text-lg text-muted-foreground">
-            No news or events found matching your criteria.
+            No items found matching your criteria.
           </p>
         </div>
       </div>

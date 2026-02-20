@@ -23,7 +23,7 @@ export function CountUp({ value, duration = 1.5, suffix = "" }: CountUpProps) {
 
           animate(0, value, {
             duration,
-            ease: "easeOut",
+            ease: "easeOut" as const,
             onUpdate(latest) {
               setCount(Math.floor(latest));
             },
@@ -45,3 +45,4 @@ export function CountUp({ value, duration = 1.5, suffix = "" }: CountUpProps) {
     </span>
   );
 }
+

@@ -1,34 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { X } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { getPublicGalleries } from "src/services/publicGallery.service";
+import {
+  buildResponsiveCloudinarySrcSet,
+  getOptimizedCloudinaryUrl,
+} from "src/helper/imageOptimization";
 
-const galleryImages = [
-  {
-    src: "https://images.unsplash.com/photo-1599592187465-6dc742367282?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdGFydHVwJTIwcGl0Y2glMjBwcmVzZW50YXRpb258ZW58MXx8fHwxNzY2MDEzOTEyfDA&ixlib=rb-4.1.0&q=80&w=1080",
-    title: "Pitch Presentation",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1745847768380-2caeadbb3b71?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMGhhbmRzaGFrZSUyMHBhcnRuZXJzaGlwfGVufDF8fHx8MTc2NTk5MzQ2Mnww&ixlib=rb-4.1.0&q=80&w=1080",
-    title: "Partnership Signing",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1760493828288-d2dbb70d18c9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbm5vdmF0aW9uJTIwbGFiJTIwdGVjaG5vbG9neXxlbnwxfHx8fDE3NjU5ODY1MjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
-    title: "Innovation Lab",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1630487656049-6db93a53a7e9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWFtJTIwYnJhaW5zdG9ybWluZyUyMHNlc3Npb258ZW58MXx8fHwxNzY2MDQ0OTA5fDA&ixlib=rb-4.1.0&q=80&w=1080",
-    title: "Brainstorming Session",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1624555130858-7ea5b8192c49?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdGFydHVwJTIwdGVhbSUyMHdvcmtpbmd8ZW58MXx8fHwxNzY1OTQ3NTI5fDA&ixlib=rb-4.1.0&q=80&w=1080",
-    title: "Team Collaboration",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1706759755789-66d39fd252b1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWNobm9sb2d5JTIwbmV0d29ya2luZyUyMGV2ZW50fGVufDF8fHx8MTc2NjA0NDc4M3ww&ixlib=rb-4.1.0&q=80&w=1080",
-    title: "Networking Event",
-  },
-];
+interface GalleryPreviewItem {
+  id: string;
+  src: string;
+  title: string;
+}
 
 const slideInFromLeft = {
   hidden: {
@@ -40,13 +25,58 @@ const slideInFromLeft = {
     x: 0,
     transition: {
       duration: 0.8,
-      ease: "easeOut",
+      ease: "easeOut" as const,
     },
   },
 };
 
 export function GallerySection() {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<GalleryPreviewItem | null>(
+    null
+  );
+  const [galleryImages, setGalleryImages] = useState<GalleryPreviewItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const loadGalleryPreview = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const galleries = await getPublicGalleries();
+        const mapped = galleries
+          .filter((gallery) => Boolean(gallery.coverImage?.imageUrl))
+          .map((gallery) => ({
+            id: gallery.id,
+            src: gallery.coverImage?.imageUrl || "",
+            title: gallery.title,
+          }))
+          .slice(0, 6);
+
+        if (!isCancelled) {
+          setGalleryImages(mapped);
+        }
+      } catch {
+        if (!isCancelled) {
+          setError("Failed to load gallery preview.");
+          setGalleryImages([]);
+        }
+      } finally {
+        if (!isCancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    void loadGalleryPreview();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
 
   return (
     <section id="gallery" className="py-24 bg-white">
@@ -77,32 +107,77 @@ export function GallerySection() {
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {galleryImages.map((image, index) => (
-            <div
-              key={index}
-              className="relative group cursor-pointer overflow-hidden rounded-lg aspect-square"
-              onClick={() => setSelectedImage(image.src)}
-            >
-              <img
-                src={image.src}
-                alt={image.title}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-                <p className="text-white p-4">{image.title}</p>
+        {loading && (
+          <div className="py-12">
+            <p className="text-center text-muted-foreground">
+              Loading gallery...
+            </p>
+          </div>
+        )}
+
+        {!loading && error && (
+          <div className="py-12">
+            <p className="text-center text-destructive">{error}</p>
+          </div>
+        )}
+
+        {!loading && !error && galleryImages.length > 0 && (
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {galleryImages.map((image, index) => (
+              <div
+                key={image.id}
+                className="relative group cursor-pointer overflow-hidden rounded-lg aspect-square"
+                onClick={() => setSelectedImage(image)}
+              >
+                <img
+                  src={getOptimizedCloudinaryUrl(image.src, {
+                    width: 480,
+                    height: 480,
+                    crop: "fill",
+                    gravity: "auto",
+                    quality: "auto:eco",
+                  })}
+                  srcSet={buildResponsiveCloudinarySrcSet(
+                    image.src,
+                    [180, 240, 360, 480],
+                    {
+                      crop: "fill",
+                      gravity: "auto",
+                      aspectRatio: 1,
+                      quality: "auto:eco",
+                    }
+                  )}
+                  sizes="(max-width: 768px) 50vw, 33vw"
+                  alt={image.title}
+                  loading={index < 2 ? "eager" : "lazy"}
+                  fetchPriority={index < 2 ? "high" : "auto"}
+                  decoding="async"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                  <p className="text-white p-4">{image.title}</p>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
+
+        {!loading && !error && galleryImages.length === 0 && (
+          <div className="py-12">
+            <p className="text-center text-muted-foreground">
+              No gallery images available.
+            </p>
+          </div>
+        )}
 
         <div className="text-center mt-12">
           <Button
+            asChild
             size="lg"
             variant="outline"
             className="border-2 border-primary text-primary hover:bg-primary hover:text-white"
           >
-            View Full Gallery
+            <Link to="/gallery">View Full Gallery</Link>
           </Button>
         </div>
       </div>
@@ -120,8 +195,11 @@ export function GallerySection() {
             <X className="h-8 w-8" />
           </button>
           <img
-            src={selectedImage}
-            alt="Gallery"
+            src={getOptimizedCloudinaryUrl(selectedImage.src, {
+              width: 1600,
+              crop: "limit",
+            })}
+            alt={selectedImage.title}
             className="max-w-full max-h-full object-contain"
             onClick={(e) => e.stopPropagation()}
           />
@@ -130,3 +208,4 @@ export function GallerySection() {
     </section>
   );
 }
+

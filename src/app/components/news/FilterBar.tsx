@@ -6,15 +6,19 @@ interface FilterBarProps {
   onCategoryChange: (category: string) => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
+  categories?: string[];
+  searchPlaceholder?: string;
 }
 
-const categories = ["All", "News", "Event", "Announcement"];
+const defaultCategories = ["All", "News", "Event", "Announcement"];
 
 export function FilterBar({
   selectedCategory,
   onCategoryChange,
   searchQuery,
   onSearchChange,
+  categories = defaultCategories,
+  searchPlaceholder = "Search news & events...",
 }: FilterBarProps) {
   return (
     <section className="py-4 sm:py-6 border-b border-border bg-white sticky top-16 sm:top-20 z-40">
@@ -44,7 +48,7 @@ export function FilterBar({
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="Search news & events..."
+              placeholder={searchPlaceholder}
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               className="pl-10 bg-input-background border-border text-sm"
