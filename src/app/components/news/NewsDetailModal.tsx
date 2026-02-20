@@ -152,12 +152,6 @@ export function NewsDetailModal({ item, onClose }: NewsDetailModalProps) {
             >
               Share
             </Button>
-            <Button
-              variant="outline"
-              className="w-full sm:w-auto border-border text-foreground hover:bg-muted"
-            >
-              View All {item.category}s
-            </Button>
           </div>
         </div>
       </div>

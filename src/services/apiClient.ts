@@ -16,7 +16,7 @@ interface ApiErrorPayload {
   [key: string]: unknown;
 }
 
-const DEV_API_BASE_URL = "http://localhost:4000";
+const DEV_API_BASE_URL = "https://cied-backend.vercel.app";
 const DEFAULT_TIMEOUT_MS = Number(import.meta.env.VITE_PUBLIC_API_TIMEOUT_MS) || 10000;
 const DEFAULT_RETRIES = Number(import.meta.env.VITE_PUBLIC_API_RETRIES) || 2;
 const RETRY_BASE_DELAY_MS = Number(import.meta.env.VITE_PUBLIC_API_RETRY_DELAY_MS) || 400;
