@@ -105,11 +105,12 @@ export function MembersRecognitionPage() {
                         key={member.id}
                         className="border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
                       >
-                        <div className="h-52 bg-muted overflow-hidden">
+                        <div className="h-56 bg-muted/40 p-3">
                           <img
                             src={member.imageUrl || "/ciedLogo.jpeg"}
                             alt={member.name}
-                            className="w-full h-full object-cover"
+                            className="h-full w-full rounded-lg bg-white object-contain object-top"
+                            loading="lazy"
                           />
                         </div>
                         <div className="p-5 space-y-2">
