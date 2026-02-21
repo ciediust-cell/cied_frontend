@@ -6,7 +6,7 @@ export interface PublicMemberItem {
   id: string;
   name: string;
   designation: string;
-  department: string | null;
+  description: string | null;
   role: MemberRole;
   imageUrl: string;
   imagePublicId: string;

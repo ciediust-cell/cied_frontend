@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 interface LeaderProfile {
   name: string;
   designation: string;
-  department?: string;
+  description?: string;
   image: string;
   email?: string;
 }
@@ -14,7 +14,7 @@ const leaders: LeaderProfile[] = [
   {
     name: "Prof. Mohammad Ashraf Shah",
     designation: "Director, CIED",
-    department: "Department of Computer Science",
+    description: "Department of Computer Science",
     image:
       "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400",
     email: "director.cied@iust.ac.in",
@@ -22,7 +22,7 @@ const leaders: LeaderProfile[] = [
   {
     name: "Dr. Syed Mudasir Ahmad",
     designation: "Program Manager",
-    department: "Incubation & Acceleration",
+    description: "Incubation & Acceleration",
     image:
       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400",
     email: "program.cied@iust.ac.in",
@@ -30,7 +30,7 @@ const leaders: LeaderProfile[] = [
   {
     name: "Dr. Aasim Zafar",
     designation: "Innovation Coordinator",
-    department: "Research & Development",
+    description: "Research & Development",
     image:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400",
     email: "innovation.cied@iust.ac.in",
@@ -38,7 +38,7 @@ const leaders: LeaderProfile[] = [
   {
     name: "Ms. Rukhsana Akhter",
     designation: "Startup Mentor",
-    department: "Business Development",
+    description: "Business Development",
     image:
       "https://images.unsplash.com/photo-1580489944761-15a19d654956?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400",
     email: "mentor.cied@iust.ac.in",
@@ -113,9 +113,9 @@ export function Leadership() {
                     {leader.designation}
                   </p>
 
-                  {leader.department && (
+                  {leader.description && (
                     <p className="text-xs text-muted-foreground mb-4">
-                      {leader.department}
+                      {leader.description}
                     </p>
                   )}
 

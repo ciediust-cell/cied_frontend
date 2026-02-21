@@ -5,7 +5,7 @@ import { X, Mail, Linkedin, Briefcase } from "lucide-react";
 interface TeamMember {
   name: string;
   role: string;
-  department: string;
+  description: string;
   image: string;
   bio?: string;
   expertise?: string[];
@@ -17,7 +17,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Aamir Rashid",
     role: "Incubation Manager",
-    department: "Programs & Operations",
+    description: "Programs & Operations",
     image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400",
     bio: "Manages day-to-day incubation operations, startup onboarding, and program execution with focus on delivering exceptional value to incubatees.",
     expertise: [
@@ -31,7 +31,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Rukhsana Akhter",
     role: "Business Development Lead",
-    department: "Partnerships & Outreach",
+    description: "Partnerships & Outreach",
     image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400",
     bio: "Leads strategic partnerships, corporate collaborations, and investor connections to expand CIED's ecosystem and funding opportunities.",
     expertise: [
@@ -45,7 +45,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Farooq Ahmad",
     role: "Technology & Infrastructure Lead",
-    department: "Technical Support",
+    description: "Technical Support",
     image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400",
     bio: "Oversees technical infrastructure, digital platforms, and technology support services for incubated startups and center operations.",
     expertise: ["Technology Infrastructure", "Digital Platforms", "IT Support"],
@@ -54,7 +54,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Sana Altaf",
     role: "Program Coordinator",
-    department: "Events & Training",
+    description: "Events & Training",
     image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400",
     bio: "Coordinates training programs, workshops, events, and networking sessions to enhance entrepreneurial skills and community engagement.",
     expertise: [
@@ -68,7 +68,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Tariq Hussain",
     role: "Finance & Compliance Officer",
-    department: "Finance & Administration",
+    description: "Finance & Administration",
     image: "https://images.unsplash.com/photo-1463453091185-61582044d556?w=400",
     bio: "Manages financial operations, budgeting, compliance, and reporting to ensure transparent and efficient resource utilization.",
     expertise: ["Financial Management", "Compliance", "Budget Planning"],
@@ -77,7 +77,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Nazia Bashir",
     role: "Communications & Marketing Lead",
-    department: "Marketing & PR",
+    description: "Marketing & PR",
     image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400",
     bio: "Drives communications strategy, brand building, social media presence, and public relations to enhance CIED's visibility and impact.",
     expertise: ["Digital Marketing", "Brand Strategy", "Public Relations"],
@@ -87,7 +87,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Imran Khan",
     role: "Mentor Coordination Lead",
-    department: "Mentorship Programs",
+    description: "Mentorship Programs",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
     bio: "Coordinates mentor-startup matching, mentorship sessions, and feedback mechanisms to ensure effective guidance and support.",
     expertise: ["Mentor Management", "Startup Support", "Advisory Services"],
@@ -96,7 +96,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Shaista Jan",
     role: "Research & Analytics Officer",
-    department: "Research & Development",
+    description: "Research & Development",
     image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400",
     bio: "Conducts research on startup trends, ecosystem analysis, and impact assessment to inform strategic decisions and policy advocacy.",
     expertise: ["Research", "Data Analytics", "Impact Assessment"],
@@ -106,7 +106,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Waseem Akram",
     role: "Legal & IP Advisor",
-    department: "Legal Affairs",
+    description: "Legal Affairs",
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
     bio: "Provides legal guidance, intellectual property support, and regulatory compliance assistance to startups and incubation operations.",
     expertise: ["Legal Advisory", "IP Protection", "Compliance"],
@@ -158,9 +158,9 @@ export function CoreTeam() {
                     {member.role}
                   </div>
 
-                  {/* Department */}
+                  {/* Description */}
                   <p className="text-sm text-muted-foreground">
-                    {member.department}
+                    {member.description}
                   </p>
 
                   {/* View Details Hint */}
@@ -221,7 +221,7 @@ export function CoreTeam() {
                   {selectedMember.role}
                 </div>
                 <p className="text-muted-foreground">
-                  {selectedMember.department}
+                  {selectedMember.description}
                 </p>
               </div>
 

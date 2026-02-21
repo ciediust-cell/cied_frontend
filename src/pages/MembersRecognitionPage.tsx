@@ -117,10 +117,10 @@ export function MembersRecognitionPage() {
                           <p className="text-sm text-foreground">
                             {member.designation}
                           </p>
-                          {member.department && (
+                          {member.description && (
                             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                               <Building2 className="h-4 w-4" />
-                              <span>{member.department}</span>
+                              <span>{member.description}</span>
                             </div>
                           )}
                           <div className="flex items-center gap-3 pt-2">
