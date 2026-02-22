@@ -20,8 +20,8 @@ export function BookWorkspace() {
                 Book Your Working Space
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Access world-class facilities designed to accelerate your startup
-                journey
+                Access world-class facilities designed to accelerate your
+                startup journey
               </p>
             </div>
 
@@ -43,8 +43,8 @@ export function BookWorkspace() {
                           Dedicated Workstations
                         </div>
                         <p className="text-sm text-muted-foreground">
-                          Fully equipped desks with high-speed internet and power
-                          backup
+                          Fully equipped desks with high-speed internet and
+                          power backup
                         </p>
                       </div>
                     </div>
@@ -80,8 +80,8 @@ export function BookWorkspace() {
                           Collaboration Areas
                         </div>
                         <p className="text-sm text-muted-foreground">
-                          Open spaces for networking, brainstorming, and informal
-                          meetings
+                          Open spaces for networking, brainstorming, and
+                          informal meetings
                         </p>
                       </div>
                     </div>
@@ -123,7 +123,7 @@ export function BookWorkspace() {
               <div className="order-first lg:order-last">
                 <div className="relative rounded-2xl overflow-hidden shadow-xl border-4 border-white">
                   <img
-                    src="https://images.unsplash.com/photo-1560821630-1a7c45c3286e?w=800"
+                    src="https://cdn.jsdelivr.net/gh/ciediust-cell/cied_images/CIED_COMPRESSED/IMG_3369.jpg"
                     alt="CIED Working Space"
                     className="w-full h-[400px] lg:h-[500px] object-cover"
                   />

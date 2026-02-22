@@ -49,7 +49,7 @@ export function CIEDAtIUST() {
               className="rounded-xl sm:rounded-2xl overflow-hidden shadow-lg sm:shadow-xl"
             >
               <img
-                src="https://images.unsplash.com/photo-1694702740570-0a31ee1525c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBvZmZpY2UlMjBidWlsZGluZ3xlbnwxfHx8fDE3NjY5NzExMTd8MA&ixlib=rb-4.1.0&q=80&w=1080"
+                src="https://cdn.jsdelivr.net/gh/ciediust-cell/cied_images/CIED_COMPRESSED/IUst.webp"
                 alt="IUST Campus"
                 className="w-full h-64 sm:h-80 lg:h-96 object-cover"
               />
@@ -161,4 +161,3 @@ export function CIEDAtIUST() {
     </section>
   );
 }
-

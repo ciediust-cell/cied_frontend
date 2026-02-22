@@ -54,19 +54,17 @@ export function AboutHero() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: "easeOut" as const }}
-          className="relative w-full max-w-5xl mx-auto rounded-xl sm:rounded-2xl overflow-hidden shadow-md sm:shadow-lg"
+          className="relative w-full max-w-5xl mx-auto rounded-xl sm:rounded-2xl overflow-hidden shadow-md sm:shadow-lg bg-white"
         >
           <img
-            src="https://images.unsplash.com/photo-1765133469414-02f4e445df19?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx1bml2ZXJzaXR5JTIwY2FtcHVzJTIwaW5ub3ZhdGlvbnxlbnwxfHx8fDE3NjcwODU2MzV8MA&ixlib=rb-4.1.0&q=80&w=1080"
+            src="https://cdn.jsdelivr.net/gh/ciediust-cell/cied_images/CIED_COMPRESSED/1868_251203094954(1).jpg"
             alt="CIED IUST Campus"
-            className="w-full h-56 sm:h-80 lg:h-96 object-cover"
+            className="w-full h-auto object-contain"
           />
 
-          {/* Subtle overlay for readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none" />
         </motion.div>
       </div>
     </section>
   );
 }
-

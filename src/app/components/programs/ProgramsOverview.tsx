@@ -62,7 +62,7 @@ export function ProgramsOverview() {
               className="rounded-2xl overflow-hidden shadow-xl"
             >
               <img
-                src="https://images.unsplash.com/photo-1761933799610-c9a75f115794?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+                src="https://cdn.jsdelivr.net/gh/ciediust-cell/cied_images/CIED_COMPRESSED/1924_260116120705.jpg"
                 alt="Mentorship and Coaching"
                 className="w-full h-[260px] sm:h-[340px] lg:h-full object-cover"
               />
@@ -89,4 +89,3 @@ export function ProgramsOverview() {
     </section>
   );
 }
-

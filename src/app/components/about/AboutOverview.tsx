@@ -90,7 +90,7 @@ export function AboutOverview() {
               className="rounded-xl sm:rounded-2xl overflow-hidden shadow-lg sm:shadow-xl"
             >
               <img
-                src="https://images.unsplash.com/photo-1739298061707-cefee19941b7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWFtJTIwY29sbGFib3JhdGlvbiUyMHdvcmtzcGFjZXxlbnwxfHx8fDE3NjY5NzQ4ODB8MA&ixlib=rb-4.1.0&q=80&w=1080"
+                src="https://cdn.jsdelivr.net/gh/ciediust-cell/cied_images/CIED_COMPRESSED/1940_260130112709.jpg"
                 alt="Innovation and Collaboration"
                 className="w-full h-64 sm:h-80 lg:h-[420px] object-cover"
               />
@@ -118,4 +118,3 @@ export function AboutOverview() {
     </section>
   );
 }
-

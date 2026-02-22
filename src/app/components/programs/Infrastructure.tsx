@@ -133,7 +133,7 @@ export function Infrastructure() {
           className="rounded-2xl overflow-hidden shadow-xl"
         >
           <img
-            src="https://images.unsplash.com/photo-1431540015161-0bf868a2d407?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+            src="https://cdn.jsdelivr.net/gh/ciediust-cell/cied_images/CIED_COMPRESSED/IMG_3426.jpg"
             alt="CIED Infrastructure"
             className="w-full h-64 sm:h-80 object-cover"
           />
@@ -142,4 +142,3 @@ export function Infrastructure() {
     </section>
   );
 }
-

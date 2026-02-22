@@ -74,7 +74,7 @@ export function AboutSection() {
           <div className="relative">
             <div className="absolute -top-3 -left-3 sm:-top-6 sm:-left-6 w-full h-full border-4 border-secondary/20 rounded-2xl" />
             <img
-              src="https://images.unsplash.com/photo-1680226425348-cedaf70ec06d"
+              src="https://cdn.jsdelivr.net/gh/ciediust-cell/cied_images/CIED_COMPRESSED/IMG_5542.jpg"
               alt="IUST Campus"
               className="relative rounded-2xl shadow-2xl w-full h-72 sm:h-[420px] lg:h-[500px] object-cover"
             />
