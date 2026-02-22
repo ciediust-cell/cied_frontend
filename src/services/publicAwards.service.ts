@@ -6,6 +6,7 @@ export interface PublicAwardItem {
   awardedBy: string;
   year: number;
   description: string;
+  featuredImage?: string | null;
   order: number;
   isActive: boolean;
 }

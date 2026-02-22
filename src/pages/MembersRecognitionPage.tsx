@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Award, Building2, Linkedin, Mail, Users } from "lucide-react";
+import { Award, Building2, Linkedin, Mail, Users, X } from "lucide-react";
+import { getOptimizedCloudinaryUrl } from "src/helper/imageOptimization";
 import {
   getPublicMembers,
   type MemberRole,
@@ -16,6 +17,7 @@ export function MembersRecognitionPage() {
     Partial<Record<MemberRole, PublicMemberItem[]>>
   >({});
   const [awards, setAwards] = useState<PublicAwardItem[]>([]);
+  const [selectedAward, setSelectedAward] = useState<PublicAwardItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -172,8 +174,37 @@ export function MembersRecognitionPage() {
                     {awards.map((award) => (
                       <article
                         key={award.id}
-                        className="bg-white border rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow"
+                        className={`bg-white border rounded-xl p-6 shadow-sm transition-shadow ${
+                          award.featuredImage
+                            ? "hover:shadow-md cursor-pointer"
+                            : "hover:shadow-sm"
+                        }`}
+                        onClick={() => {
+                          if (award.featuredImage) {
+                            setSelectedAward(award);
+                          }
+                        }}
+                        role={award.featuredImage ? "button" : undefined}
+                        tabIndex={award.featuredImage ? 0 : -1}
+                        onKeyDown={(event) => {
+                          if (!award.featuredImage) return;
+                          if (event.key === "Enter" || event.key === " ") {
+                            event.preventDefault();
+                            setSelectedAward(award);
+                          }
+                        }}
                       >
+                        {award.featuredImage && (
+                          <img
+                            src={getOptimizedCloudinaryUrl(award.featuredImage, {
+                              width: 900,
+                              crop: "limit",
+                            })}
+                            alt={award.title}
+                            className="w-full h-44 object-cover rounded-lg mb-4"
+                            loading="lazy"
+                          />
+                        )}
                         <div className="flex items-center justify-between gap-3 mb-3">
                           <h3 className="text-lg text-primary">{award.title}</h3>
                           <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm">
@@ -186,6 +217,11 @@ export function MembersRecognitionPage() {
                         <p className="text-sm text-foreground leading-relaxed">
                           {award.description}
                         </p>
+                        {award.featuredImage && (
+                          <p className="text-xs text-muted-foreground mt-3">
+                            Click to view full image
+                          </p>
+                        )}
                       </article>
                     ))}
                   </div>
@@ -193,6 +229,30 @@ export function MembersRecognitionPage() {
               </div>
             </section>
           </>
+        )}
+
+        {selectedAward?.featuredImage && (
+          <div
+            className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+            onClick={() => setSelectedAward(null)}
+          >
+            <button
+              className="absolute top-4 right-4 text-white hover:text-primary/50 transition-colors"
+              onClick={() => setSelectedAward(null)}
+              aria-label="Close award image"
+            >
+              <X className="h-8 w-8" />
+            </button>
+            <img
+              src={getOptimizedCloudinaryUrl(selectedAward.featuredImage, {
+                width: 1600,
+                crop: "limit",
+              })}
+              alt={selectedAward.title}
+              className="max-w-full max-h-full object-contain"
+              onClick={(event) => event.stopPropagation()}
+            />
+          </div>
         )}
       </main>
     </div>
