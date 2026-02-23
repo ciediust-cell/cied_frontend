@@ -6,8 +6,10 @@ import { FilterBar } from "src/app/components/news/FilterBar";
 import { HostEvent } from "src/app/components/news/HostEvent";
 import { NewsDetailModal } from "src/app/components/news/NewsDetailModal";
 import { NewsGrid } from "src/app/components/news/NewsGrid";
+import { StructuredData } from "src/app/components/seo/StructuredData";
 import { Button } from "src/app/components/ui/button";
 import { fadeUp, staggerContainer } from "src/helper/animations";
+import { buildEventsCollectionJsonLd } from "src/helper/structuredData";
 import {
   getPublicEventBySlug,
   getPublicEvents,
@@ -95,6 +97,10 @@ export function EventsPage() {
     ? filteredEvents.filter((item) => item.id !== featuredItem.id)
     : filteredEvents;
   const displayedEvents = gridItems.slice(0, displayCount);
+  const eventsCollectionJsonLd = useMemo(
+    () => buildEventsCollectionJsonLd(eventItems),
+    [eventItems]
+  );
 
   const handleLoadMore = () => {
     setDisplayCount((prev) => prev + 6);
@@ -129,6 +135,12 @@ export function EventsPage() {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
+      {eventItems.length > 0 && (
+        <StructuredData
+          id="events-collection-jsonld"
+          data={eventsCollectionJsonLd}
+        />
+      )}
       <main className="pt-16 sm:pt-20">
         <section className="bg-gradient-to-b from-primary/5 to-white py-12 sm:py-16">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">

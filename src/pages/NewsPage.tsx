@@ -5,8 +5,10 @@ import { FeaturedCard } from "src/app/components/news/FeaturedCard";
 import { FilterBar } from "src/app/components/news/FilterBar";
 import { NewsDetailModal } from "src/app/components/news/NewsDetailModal";
 import { NewsGrid } from "src/app/components/news/NewsGrid";
+import { StructuredData } from "src/app/components/seo/StructuredData";
 import { Button } from "src/app/components/ui/button";
 import { fadeUp, staggerContainer } from "src/helper/animations";
+import { buildNewsCollectionJsonLd } from "src/helper/structuredData";
 import {
   getPublicNews,
   getPublicNewsBySlug,
@@ -15,6 +17,16 @@ import type { NewsItem } from "src/types/news";
 
 const NEWS_CATEGORIES = ["All", "News"];
 const PAGE_SIZE = 6;
+
+type PublicNewsListItem = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  featuredImage: string;
+  newsDate: string;
+  publishedAt: string | null;
+};
 
 const formatNewsDate = (newsDate: string | null, publishedAt?: string | null) => {
   const source = newsDate || publishedAt;
@@ -28,15 +40,7 @@ const formatNewsDate = (newsDate: string | null, publishedAt?: string | null) =>
   });
 };
 
-const toNewsItem = (item: {
-  id: string;
-  slug: string;
-  title: string;
-  excerpt: string;
-  featuredImage: string;
-  newsDate: string;
-  publishedAt: string | null;
-}): NewsItem => ({
+const toNewsItem = (item: PublicNewsListItem): NewsItem => ({
   id: item.id,
   slug: item.slug,
   category: "News",
@@ -55,6 +59,9 @@ export function NewsPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const [newsStructuredItems, setNewsStructuredItems] = useState<
+    PublicNewsListItem[]
+  >([]);
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(false);
 
@@ -64,6 +71,11 @@ export function NewsPage() {
 
     setNewsItems((prev) =>
       targetPage === 1 ? mapped : [...prev, ...mapped.filter((n) => !prev.some((p) => p.id === n.id))]
+    );
+    setNewsStructuredItems((prev) =>
+      targetPage === 1
+        ? response.data
+        : [...prev, ...response.data.filter((n) => !prev.some((p) => p.id === n.id))]
     );
     setPage(response.pagination.page);
     setHasMore(response.pagination.page < response.pagination.totalPages);
@@ -101,6 +113,10 @@ export function NewsPage() {
   const gridItems = featuredItem
     ? filteredNews.filter((item) => item.id !== featuredItem.id)
     : filteredNews;
+  const newsCollectionJsonLd = useMemo(
+    () => buildNewsCollectionJsonLd(newsStructuredItems),
+    [newsStructuredItems]
+  );
 
   const handleLoadMore = async () => {
     if (!hasMore || loadingMore) return;
@@ -138,6 +154,9 @@ export function NewsPage() {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
+      {newsStructuredItems.length > 0 && (
+        <StructuredData id="news-collection-jsonld" data={newsCollectionJsonLd} />
+      )}
       <main className="pt-16 sm:pt-20">
         <section className="bg-gradient-to-b from-primary/5 to-white py-12 sm:py-16">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
