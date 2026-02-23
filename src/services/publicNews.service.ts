@@ -6,6 +6,7 @@ interface PublicNewsListItem {
   slug: string;
   excerpt: string;
   featuredImage: string;
+  newsDate: string;
   publishedAt: string | null;
 }
 
@@ -26,6 +27,7 @@ interface PublicNewsDetailResponse {
   excerpt: string;
   content: string;
   featuredImage: string;
+  newsDate: string;
   publishedAt: string | null;
 }
 

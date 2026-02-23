@@ -16,10 +16,11 @@ import type { NewsItem } from "src/types/news";
 const NEWS_CATEGORIES = ["All", "News"];
 const PAGE_SIZE = 6;
 
-const formatPublishedDate = (publishedAt: string | null) => {
-  if (!publishedAt) return "Unpublished";
-  const date = new Date(publishedAt);
-  if (Number.isNaN(date.getTime())) return "Unpublished";
+const formatNewsDate = (newsDate: string | null, publishedAt?: string | null) => {
+  const source = newsDate || publishedAt;
+  if (!source) return "Date TBA";
+  const date = new Date(source);
+  if (Number.isNaN(date.getTime())) return "Date TBA";
   return date.toLocaleDateString("en-IN", {
     day: "numeric",
     month: "long",
@@ -33,6 +34,7 @@ const toNewsItem = (item: {
   title: string;
   excerpt: string;
   featuredImage: string;
+  newsDate: string;
   publishedAt: string | null;
 }): NewsItem => ({
   id: item.id,
@@ -41,7 +43,7 @@ const toNewsItem = (item: {
   title: item.title,
   summary: item.excerpt,
   description: item.excerpt,
-  date: formatPublishedDate(item.publishedAt),
+  date: formatNewsDate(item.newsDate, item.publishedAt),
   images: [item.featuredImage],
 });
 
@@ -125,7 +127,7 @@ export function NewsPage() {
           ...current,
           summary: details.excerpt || current.summary,
           description: details.content || details.excerpt || current.description,
-          date: formatPublishedDate(details.publishedAt),
+          date: formatNewsDate(details.newsDate, details.publishedAt),
           images: details.featuredImage ? [details.featuredImage] : current.images,
         };
       });

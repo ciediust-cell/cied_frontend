@@ -55,9 +55,10 @@ export function NewsEvents() {
         ]);
 
         const newsItems: HomeUpdateItem[] = newsResponse.data.map((item) => {
-          const date = formatDate(item.publishedAt);
-          const timestamp = item.publishedAt
-            ? new Date(item.publishedAt).getTime()
+          const sourceDate = item.newsDate || item.publishedAt;
+          const date = formatDate(sourceDate);
+          const timestamp = sourceDate
+            ? new Date(sourceDate).getTime()
             : 0;
           return {
             id: `news-${item.id}`,
