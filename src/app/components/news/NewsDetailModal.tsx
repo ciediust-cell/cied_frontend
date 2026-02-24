@@ -1,7 +1,15 @@
 import { useState } from "react";
-import { X, Calendar, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  X,
+  Calendar,
+  MapPin,
+  ChevronLeft,
+  ChevronRight,
+  Images,
+} from "lucide-react";
 import { Button } from "../ui/button";
 import type { NewsItem } from "src/types/news";
+import { useNavigate } from "react-router-dom";
 
 interface NewsDetailModalProps {
   item: NewsItem;
@@ -22,6 +30,7 @@ const getCategoryColor = (category: string) => {
 };
 
 export function NewsDetailModal({ item, onClose }: NewsDetailModalProps) {
+  const navigate = useNavigate();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handlePrevImage = () => {
@@ -146,6 +155,17 @@ export function NewsDetailModal({ item, onClose }: NewsDetailModalProps) {
 
           {/* ACTION BUTTONS */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8 pt-6 border-t border-border">
+            {item.slug && (
+              <Button
+                onClick={() => {
+                  navigate(`/gallery?newsSlug=${encodeURIComponent(item.slug || "")}`);
+                }}
+                className="w-full sm:w-auto bg-primary hover:bg-primary/90"
+              >
+                <Images className="h-4 w-4 mr-2" />
+                View Gallery
+              </Button>
+            )}
             <Button
               variant="outline"
               className="w-full sm:w-auto border-primary text-primary hover:bg-primary hover:text-white"

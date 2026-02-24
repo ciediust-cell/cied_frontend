@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Mail } from "lucide-react";
 import { FeaturedCard } from "src/app/components/news/FeaturedCard";
 import { FilterBar } from "src/app/components/news/FilterBar";
 import { NewsDetailModal } from "src/app/components/news/NewsDetailModal";
@@ -43,12 +42,13 @@ const formatNewsDate = (newsDate: string | null, publishedAt?: string | null) =>
 const toNewsItem = (item: PublicNewsListItem): NewsItem => ({
   id: item.id,
   slug: item.slug,
+  linkedGalleryId: null,
   category: "News",
   title: item.title,
   summary: item.excerpt,
   description: item.excerpt,
   date: formatNewsDate(item.newsDate, item.publishedAt),
-  images: [item.featuredImage],
+  images: item.featuredImage ? [item.featuredImage] : ["/ciedLogo.jpeg"],
 });
 
 export function NewsPage() {
@@ -139,12 +139,28 @@ export function NewsPage() {
       const details = await getPublicNewsBySlug(item.slug);
       setSelectedNews((current) => {
         if (!current || current.id !== item.id) return current;
+
+        const linkedGalleryImages = Array.isArray(details.galleryImages)
+          ? details.galleryImages
+              .map((galleryImage) => galleryImage.imageUrl)
+              .filter((imageUrl): imageUrl is string => Boolean(imageUrl))
+          : [];
+
+        const mergedImages = Array.from(
+          new Set(
+            [details.featuredImage, ...linkedGalleryImages].filter(
+              (imageUrl): imageUrl is string => Boolean(imageUrl),
+            ),
+          ),
+        );
+
         return {
           ...current,
           summary: details.excerpt || current.summary,
           description: details.content || details.excerpt || current.description,
           date: formatNewsDate(details.newsDate, details.publishedAt),
-          images: details.featuredImage ? [details.featuredImage] : current.images,
+          linkedGalleryId: details.galleryId,
+          images: mergedImages.length > 0 ? mergedImages : current.images,
         };
       });
     } catch {
@@ -257,47 +273,6 @@ export function NewsPage() {
             </motion.div>
           </div>
         )}
-
-        <section className="py-12 sm:py-16 bg-gradient-to-br from-primary/5 to-accent/5">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="max-w-2xl mx-auto text-center"
-            >
-              <motion.h2
-                variants={fadeUp}
-                className="text-2xl sm:text-3xl mb-3 sm:mb-4 text-primary"
-              >
-                Stay Updated with CIED News
-              </motion.h2>
-
-              <motion.p
-                variants={fadeUp}
-                className="text-sm sm:text-base text-muted-foreground mb-6"
-              >
-                Subscribe to receive the latest announcements and milestones
-                from our startup ecosystem.
-              </motion.p>
-
-              <motion.div
-                variants={fadeUp}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.97 }}
-              >
-                <Button
-                  size="lg"
-                  className="w-full sm:w-auto bg-primary hover:bg-primary/90"
-                >
-                  <Mail className="mr-2 h-5 w-5" />
-                  Subscribe
-                </Button>
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
       </main>
 
       {selectedNews && (

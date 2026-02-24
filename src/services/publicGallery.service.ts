@@ -3,6 +3,7 @@ import { apiGet } from "./apiClient";
 export type PublicGalleryCategory =
   | "INFRASTRUCTURE"
   | "EVENTS"
+  | "NEWS"
   | "WORKSPACE"
   | "FACILITIES"
   | "ACTIVITIES"
@@ -39,8 +40,10 @@ export interface PublicGalleryDetail {
   images: PublicGalleryImage[];
 }
 
-export async function getPublicGalleries() {
-  return apiGet<PublicGalleryListItem[]>("/api/gallery");
+export async function getPublicGalleries(newsSlug?: string) {
+  return apiGet<PublicGalleryListItem[]>("/api/gallery", {
+    query: { newsSlug },
+  });
 }
 
 export async function getPublicGalleryById(id: string) {

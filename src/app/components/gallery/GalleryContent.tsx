@@ -3,6 +3,7 @@ import { GalleryFilter } from "./GalleryFilter";
 import { GalleryGrid } from "./GalleryGrid";
 import { GalleryLightbox } from "./GalleryLightbox";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSearchParams } from "react-router-dom";
 import {
   getPublicGalleries,
   type PublicGalleryCategory,
@@ -12,6 +13,7 @@ import {
 
 type GalleryDisplayCategory =
   | "Events & Workshops"
+  | "News Highlights"
   | "Startup Activities"
   | "Workspace"
   | "Facilities"
@@ -33,6 +35,7 @@ const INITIAL_ITEMS_TO_SHOW = 12;
 
 const CATEGORY_LABELS: Record<PublicGalleryCategory, GalleryCategory> = {
   EVENTS: "Events & Workshops",
+  NEWS: "News Highlights",
   ACTIVITIES: "Startup Activities",
   WORKSPACE: "Workspace",
   FACILITIES: "Facilities",
@@ -57,6 +60,7 @@ const toGalleryItem = (
 });
 
 export function GalleryContent() {
+  const [searchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] =
     useState<GalleryCategory>("All");
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
@@ -64,6 +68,7 @@ export function GalleryContent() {
   const [itemsToShow, setItemsToShow] = useState(INITIAL_ITEMS_TO_SHOW);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+  const newsSlugFilter = searchParams.get("newsSlug")?.trim() || "";
 
   useEffect(() => {
     let isCancelled = false;
@@ -73,7 +78,7 @@ export function GalleryContent() {
         setLoading(true);
         setError("");
 
-        const galleryList = await getPublicGalleries();
+        const galleryList = await getPublicGalleries(newsSlugFilter || undefined);
 
         if (!isCancelled) {
           setGalleries(galleryList);
@@ -93,7 +98,7 @@ export function GalleryContent() {
     return () => {
       isCancelled = true;
     };
-  }, []);
+  }, [newsSlugFilter]);
 
   const galleryItems = useMemo<GalleryItem[]>(() => {
     return galleries.flatMap((gallery) => {

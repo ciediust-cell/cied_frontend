@@ -69,6 +69,12 @@ const ROUTE_SEO: Record<string, RouteSeo> = {
       "Get in touch with CIED at IUST for programs, incubation support, partnerships, and general inquiries.",
     canonicalPath: "/contactUs",
   },
+  "/coming-soon": {
+    title: "Coming Soon | CIED",
+    description:
+      "This section of the CIED website is currently under development. Please check back soon for updates.",
+    canonicalPath: "/coming-soon",
+  },
 };
 
 const SITE_URL = (import.meta.env.VITE_SITE_URL || "").replace(/\/+$/, "");

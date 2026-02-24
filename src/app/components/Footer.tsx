@@ -99,35 +99,27 @@ export function Footer() {
             <ul className="space-y-3 text-sm">
               <li>
                 <Link
-                  to="#apply"
-                  className="text-white/70 hover:text-secondary transition-colors"
-                >
-                  Apply Now
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="#mentors"
+                  to="/coming-soon"
                   className="text-white/70 hover:text-secondary transition-colors"
                 >
                   Mentor Network
                 </Link>
               </li>
               <li>
-                <a
-                  href="#success-stories"
+                <Link
+                  to="/coming-soon"
                   className="text-white/70 hover:text-secondary transition-colors"
                 >
                   Success Stories
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#faq"
+                <Link
+                  to="/coming-soon"
                   className="text-white/70 hover:text-secondary transition-colors"
                 >
                   FAQs
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -168,7 +160,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-xs sm:text-sm text-white/70 text-center sm:text-left">
-            © 2025 CIED IUST Foundation. All rights reserved.
+            &copy; 2026 CIED IUST Foundation. All rights reserved.
           </p>
 
           <div className="flex gap-3">

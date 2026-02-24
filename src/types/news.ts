@@ -3,6 +3,7 @@ export type NewsCategory = "News" | "Event" | "Announcement";
 export interface NewsItem {
   id: string;
   slug?: string;
+  linkedGalleryId?: string | null;
   category: NewsCategory;
   title: string;
   summary: string;

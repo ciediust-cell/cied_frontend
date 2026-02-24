@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { ScrollToTop } from "src/helper/scrollToTop";
 import Layout from "src/layout/Layout";
 import { AboutPage } from "src/pages/AboutPage";
+import { ComingSoonPage } from "src/pages/ComingSoonPage";
 import { ContactPage } from "src/pages/ContactPage";
 import { EventsPage } from "src/pages/EventsPage";
 import { GalleryPage } from "src/pages/GalleryPage";
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/team" element={<Navigate to="/members" replace />} />
           <Route path="/contactUs" element={<ContactPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
+          <Route path="/coming-soon" element={<ComingSoonPage />} />
 
           {/* Add more pages here */}
           {/* <Route path="/about" element={<About />} /> */}

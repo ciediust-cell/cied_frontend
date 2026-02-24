@@ -29,6 +29,15 @@ interface PublicNewsDetailResponse {
   featuredImage: string;
   newsDate: string;
   publishedAt: string | null;
+  galleryId: string | null;
+  galleryImages: {
+    id: string;
+    imageUrl: string;
+    publicId: string;
+    caption: string | null;
+    galleryId: string;
+    createdAt: string;
+  }[];
 }
 
 export async function getPublicNews(page = 1, limit = 6) {
