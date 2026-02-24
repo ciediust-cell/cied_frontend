@@ -36,6 +36,17 @@ const buildSummary = (description: string) => {
   return `${normalized.slice(0, 157)}...`;
 };
 
+const getEventTimestamp = (value?: string) => {
+  if (!value) return Number.NEGATIVE_INFINITY;
+  const timestamp = new Date(value).getTime();
+  return Number.isNaN(timestamp) ? Number.NEGATIVE_INFINITY : timestamp;
+};
+
+const sortEventsNewestFirst = (items: NewsItem[]) =>
+  [...items].sort(
+    (a, b) => getEventTimestamp(b.eventDate) - getEventTimestamp(a.eventDate)
+  );
+
 const toEventItem = (event: PublicEventItem): NewsItem => ({
   id: event.id,
   slug: event.slug,
@@ -65,7 +76,7 @@ export function EventsPage() {
         setLoading(true);
         setError("");
         const response = await getPublicEvents();
-        setEventItems(response.map(toEventItem));
+        setEventItems(sortEventsNewestFirst(response.map(toEventItem)));
       } catch {
         setError("Failed to load events. Please try again.");
       } finally {
@@ -213,6 +224,7 @@ export function EventsPage() {
           >
             <FeaturedCard
               item={featuredItem}
+              compactImage
               onClick={() => void handleOpenEvent(featuredItem)}
             />
           </motion.div>

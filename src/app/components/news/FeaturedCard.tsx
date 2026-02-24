@@ -6,6 +6,7 @@ import type { NewsItem } from "src/types/news";
 interface FeaturedCardProps {
   item: NewsItem;
   onClick: () => void;
+  compactImage?: boolean;
 }
 
 const getCategoryColor = (category: string) => {
@@ -21,7 +22,11 @@ const getCategoryColor = (category: string) => {
   }
 };
 
-export function FeaturedCard({ item, onClick }: FeaturedCardProps) {
+export function FeaturedCard({
+  item,
+  onClick,
+  compactImage = false,
+}: FeaturedCardProps) {
   return (
     <section className="py-8 sm:py-12 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -37,7 +42,11 @@ export function FeaturedCard({ item, onClick }: FeaturedCardProps) {
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
             {/* IMAGE */}
-            <div className="relative h-56 sm:h-64 lg:h-auto overflow-hidden">
+            <div
+              className={`relative h-56 sm:h-64 ${
+                compactImage ? "lg:h-72" : "lg:h-auto"
+              } overflow-hidden`}
+            >
               <img
                 src={item.images[0]}
                 alt={item.title}

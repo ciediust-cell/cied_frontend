@@ -6,6 +6,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Images,
+  ExternalLink,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import type { NewsItem } from "src/types/news";
@@ -155,7 +156,7 @@ export function NewsDetailModal({ item, onClose }: NewsDetailModalProps) {
 
           {/* ACTION BUTTONS */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8 pt-6 border-t border-border">
-            {item.slug && (
+            {item.category !== "Event" && item.slug && (
               <Button
                 onClick={() => {
                   navigate(`/gallery?newsSlug=${encodeURIComponent(item.slug || "")}`);
@@ -164,6 +165,18 @@ export function NewsDetailModal({ item, onClose }: NewsDetailModalProps) {
               >
                 <Images className="h-4 w-4 mr-2" />
                 View Gallery
+              </Button>
+            )}
+            {item.registrationUrl && (
+              <Button asChild className="w-full sm:w-auto bg-secondary hover:bg-secondary/90">
+                <a
+                  href={item.registrationUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  Event Link
+                </a>
               </Button>
             )}
             <Button
