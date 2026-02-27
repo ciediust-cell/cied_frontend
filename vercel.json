@@ -6,18 +6,57 @@
       "has": [
         {
           "type": "query",
-          "key": "page_id",
-          "value": "359"
+          "key": "page_id"
         }
       ],
+      "status": 410
+    },
+    {
+      "src": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "p"
+        }
+      ],
+      "status": 410
+    },
+    {
+      "src": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "attachment_id"
+        }
+      ],
+      "status": 410
+    },
+    {
+      "src": "^/(wp-admin|wp-content|wp-includes)(/.*)?$",
+      "status": 410
+    },
+    {
+      "src": "^/(wp-login\\.php|xmlrpc\\.php)$",
+      "status": 410
+    },
+    {
+      "src": "^/(feed|category|tag)(/.*)?$",
       "status": 410
     },
     {
       "handle": "filesystem"
     },
     {
-      "src": "/(.*)",
+      "src": "^/$",
       "dest": "/index.html"
+    },
+    {
+      "src": "^/(aboutUs|programs|portfolio|members|news|events|gallery|contactUs|coming-soon|newsEvents|team)/?$",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "status": 404
     }
   ]
 }
