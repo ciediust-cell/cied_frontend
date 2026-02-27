@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { ScrollToTop } from "src/helper/scrollToTop";
 import Layout from "src/layout/Layout";
 import { AboutPage } from "src/pages/AboutPage";
@@ -23,12 +23,10 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/news" element={<NewsPage />} />
           <Route path="/events" element={<EventsPage />} />
-          <Route path="/newsEvents" element={<Navigate to="/news" replace />} />
           <Route path="/aboutUs" element={<AboutPage />} />
           <Route path="/programs" element={<ProgramsPage />} />
           <Route path="/portfolio" element={<StartupPortfolioPage />} />
           <Route path="/members" element={<MembersRecognitionPage />} />
-          <Route path="/team" element={<Navigate to="/members" replace />} />
           <Route path="/contactUs" element={<ContactPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/coming-soon" element={<ComingSoonPage />} />

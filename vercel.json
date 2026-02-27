@@ -2,6 +2,40 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "routes": [
     {
+      "src": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "ciediust.in"
+        }
+      ],
+      "status": 308,
+      "headers": {
+        "Location": "https://www.ciediust.in/$1"
+      }
+    },
+    {
+      "src": "^/(.+)/$",
+      "status": 308,
+      "headers": {
+        "Location": "/$1"
+      }
+    },
+    {
+      "src": "^/team/?$",
+      "status": 308,
+      "headers": {
+        "Location": "/members"
+      }
+    },
+    {
+      "src": "^/newsEvents/?$",
+      "status": 308,
+      "headers": {
+        "Location": "/news"
+      }
+    },
+    {
       "src": "/",
       "has": [
         {
@@ -51,7 +85,7 @@
       "dest": "/index.html"
     },
     {
-      "src": "^/(aboutUs|programs|portfolio|members|news|events|gallery|contactUs|coming-soon|newsEvents|team)/?$",
+      "src": "^/(aboutUs|programs|portfolio|members|news|events|gallery|contactUs|coming-soon)/?$",
       "dest": "/index.html"
     },
     {
