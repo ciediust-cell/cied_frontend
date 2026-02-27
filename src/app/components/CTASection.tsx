@@ -43,18 +43,27 @@ export function CTASection() {
 
           {/* Contact Info Cards */}
           <div className="grid sm:grid-cols-3 gap-6 mt-16">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+            <Link
+              to="/contactUs"
+              className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white/60"
+            >
               <Mail className="h-8 w-8 mx-auto mb-2" />
               <div className="text-sm opacity-70 mb-1">Email Us</div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+            </Link>
+            <Link
+              to="/contactUs"
+              className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white/60"
+            >
               <Phone className="h-8 w-8 mx-auto mb-2" />
               <div className="text-sm opacity-70 mb-1">Call Us</div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+            </Link>
+            <Link
+              to="/contactUs"
+              className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20 transition hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white/60"
+            >
               <MapPin className="h-8 w-8 mx-auto mb-2" />
               <div className="text-sm opacity-70 mb-1">Visit Us</div>
-            </div>
+            </Link>
           </div>
         </div>
       </div>
