@@ -43,6 +43,16 @@ const getSiteBase = () => {
   return resolveBaseUrl() || "https://www.ciediust.in";
 };
 
+const DEFAULT_EVENT_ADDRESS = {
+  "@type": "PostalAddress",
+  streetAddress:
+    "Centre for Innovation and Entrepreneurship Development, Islamic University of Science and Technology",
+  addressLocality: "Awantipora",
+  addressRegion: "Jammu and Kashmir",
+  postalCode: "192122",
+  addressCountry: "IN",
+};
+
 export const buildOrganizationJsonLd = () => {
   const base = getSiteBase();
 
@@ -138,7 +148,12 @@ export const buildEventsCollectionJsonLd = (items: NewsItem[]) => {
       "@type": "ItemList",
       itemListElement: items.map((item, index) => {
         const startDate = toIsoDate(item.eventDate);
+        const endDate = startDate;
         const detailsUrl = `${base}/events${item.slug ? `#${item.slug}` : ""}`;
+        const locationName =
+          item.location ||
+          "Centre for Innovation and Entrepreneurship Development, IUST";
+        const offerUrl = item.registrationUrl || detailsUrl;
 
         return {
           "@type": "ListItem",
@@ -149,28 +164,28 @@ export const buildEventsCollectionJsonLd = (items: NewsItem[]) => {
             name: item.title,
             description: item.summary,
             ...(startDate ? { startDate } : {}),
+            ...(endDate ? { endDate } : {}),
             eventStatus: "https://schema.org/EventScheduled",
             organizer: {
               "@id": `${base}#organization`,
             },
+            performer: {
+              "@type": "PerformingGroup",
+              name: "CIED IUST",
+            },
             image: [toAbsoluteUrl(item.images[0] || "/ciedLogo.jpeg")],
-            ...(item.location
-              ? {
-                  location: {
-                    "@type": "Place",
-                    name: item.location,
-                  },
-                }
-              : {}),
-            ...(item.registrationUrl
-              ? {
-                  offers: {
-                    "@type": "Offer",
-                    url: item.registrationUrl,
-                    availability: "https://schema.org/InStock",
-                  },
-                }
-              : {}),
+            location: {
+              "@type": "Place",
+              name: locationName,
+              address: DEFAULT_EVENT_ADDRESS,
+            },
+            offers: {
+              "@type": "Offer",
+              url: offerUrl,
+              price: "0",
+              priceCurrency: "INR",
+              availability: "https://schema.org/InStock",
+            },
           },
         };
       }),
