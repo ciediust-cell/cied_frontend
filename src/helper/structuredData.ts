@@ -65,6 +65,21 @@ export const buildOrganizationJsonLd = () => {
     url: base,
     logo: toAbsoluteUrl("/ciedLogo.jpeg"),
     email: "cied@iust.ac.in",
+    telephone: "+91-1933-247954",
+    address: DEFAULT_EVENT_ADDRESS,
+    sameAs: [
+      "https://www.instagram.com/cied_iust/",
+      "https://x.com/CIED_IUST",
+      "https://www.linkedin.com/company/ciediust/",
+    ],
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      telephone: "+91-1933-247954",
+      email: "cied@iust.ac.in",
+      areaServed: "IN",
+      availableLanguage: ["en"],
+    },
     parentOrganization: {
       "@type": "CollegeOrUniversity",
       name: "Islamic University of Science and Technology",
@@ -82,6 +97,7 @@ export const buildWebsiteJsonLd = () => {
     "@id": `${base}#website`,
     name: "CIED",
     url: base,
+    inLanguage: "en-IN",
     publisher: {
       "@id": `${base}#organization`,
     },
@@ -112,13 +128,14 @@ export const buildNewsCollectionJsonLd = (items: NewsStructuredDataItem[]) => {
         return {
           "@type": "ListItem",
           position: index + 1,
-          url: `${base}/news${item.slug ? `#${item.slug}` : ""}`,
+          url: `${base}/news${item.slug ? `?news=${encodeURIComponent(item.slug)}` : ""}`,
           item: {
             "@type": "NewsArticle",
             headline: item.title,
             description: item.excerpt,
             image: toAbsoluteUrl(item.featuredImage || "/ciedLogo.jpeg"),
             ...(published ? { datePublished: published, dateModified: published } : {}),
+            mainEntityOfPage: `${base}/news${item.slug ? `?news=${encodeURIComponent(item.slug)}` : ""}`,
             publisher: {
               "@id": `${base}#organization`,
             },
@@ -149,7 +166,7 @@ export const buildEventsCollectionJsonLd = (items: NewsItem[]) => {
       itemListElement: items.map((item, index) => {
         const startDate = toIsoDate(item.eventDate);
         const endDate = startDate;
-        const detailsUrl = `${base}/events${item.slug ? `#${item.slug}` : ""}`;
+        const detailsUrl = `${base}/events${item.slug ? `?event=${encodeURIComponent(item.slug)}` : ""}`;
         const locationName =
           item.location ||
           "Centre for Innovation and Entrepreneurship Development, IUST";
@@ -166,6 +183,7 @@ export const buildEventsCollectionJsonLd = (items: NewsItem[]) => {
             ...(startDate ? { startDate } : {}),
             ...(endDate ? { endDate } : {}),
             eventStatus: "https://schema.org/EventScheduled",
+            eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
             organizer: {
               "@id": `${base}#organization`,
             },

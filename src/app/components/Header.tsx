@@ -1,51 +1,121 @@
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import ciedLogo from "/ciedLogo.jpeg";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
-export function Header() {
-  const [mobileOpen, setMobileOpen] = useState(false);
+const primaryLinks = [
+  { name: "About", to: "/aboutUs" },
+  { name: "Programs", to: "/programs" },
+  { name: "News", to: "/news" },
+  { name: "Contact", to: "/contactUs" },
+];
 
-  const navLinks = [
-    { name: "About", to: "/aboutUs" },
-    { name: "Members", to: "/members" },
-    { name: "Programs", to: "/programs" },
-    { name: "News", to: "/news" },
-    { name: "Events", to: "/events" },
-    { name: "Gallery", to: "/gallery" },
-    { name: "Portfolio", to: "/portfolio" },
-    { name: "Contact", to: "/contactUs" },
-  ];
+const moreLinks = [
+  { name: "Members", to: "/members" },
+  { name: "Recognition", to: "/recognition" },
+  { name: "Events", to: "/events" },
+  { name: "Gallery", to: "/gallery" },
+  { name: "Portfolio", to: "/portfolio" },
+];
+
+export function Header() {
+  const { pathname } = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [desktopMoreOpen, setDesktopMoreOpen] = useState(false);
+  const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
+  const desktopMoreRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setDesktopMoreOpen(false);
+    setMobileMoreOpen(false);
+    setMobileOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!desktopMoreOpen) return;
+
+    const handlePointerDown = (event: MouseEvent) => {
+      if (!desktopMoreRef.current?.contains(event.target as Node)) {
+        setDesktopMoreOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setDesktopMoreOpen(false);
+      }
+    };
+
+    window.addEventListener("mousedown", handlePointerDown);
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("mousedown", handlePointerDown);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [desktopMoreOpen]);
 
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 sm:h-20">
-            {/* Logo */}
-            <Link to="/" className="flex items-center">
+          <div className="flex items-center justify-between h-20 sm:h-24">
+            <Link to="/" className="flex items-center shrink-0">
               <img
                 src={ciedLogo}
                 alt="CIED IUST Foundation"
-                className="h-11 sm:h-14 w-auto"
+                className="h-14 sm:h-16 lg:h-[4.5rem] w-auto"
               />
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-8">
-              {navLinks.map((link, index) => (
+            <nav className="hidden md:flex items-center gap-6 lg:gap-8">
+              {primaryLinks.map((link) => (
                 <Link
-                  key={index}
+                  key={link.to}
                   to={link.to}
-                  className="text-foreground hover:text-primary transition-colors"
+                  className="text-sm lg:text-base text-foreground hover:text-primary transition-colors"
                 >
                   {link.name}
                 </Link>
               ))}
+
+              <div className="relative" ref={desktopMoreRef}>
+                <button
+                  type="button"
+                  onClick={() => setDesktopMoreOpen((current) => !current)}
+                  className="inline-flex items-center gap-2 text-sm lg:text-base text-foreground hover:text-primary transition-colors"
+                  aria-haspopup="menu"
+                  aria-expanded={desktopMoreOpen}
+                >
+                  More
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${
+                      desktopMoreOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {desktopMoreOpen && (
+                  <div
+                    role="menu"
+                    className="absolute right-0 top-full mt-3 min-w-[12rem] rounded-xl border border-border bg-white shadow-xl p-2"
+                  >
+                    {moreLinks.map((link) => (
+                      <Link
+                        key={link.to}
+                        to={link.to}
+                        role="menuitem"
+                        className="block rounded-lg px-3 py-2 text-sm text-foreground hover:bg-muted hover:text-primary transition-colors"
+                      >
+                        {link.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             </nav>
 
-            {/* Mobile Toggle */}
             <button
               onClick={() => setMobileOpen(true)}
               className="md:hidden p-2 rounded-lg hover:bg-muted transition"
@@ -57,11 +127,9 @@ export function Header() {
         </div>
       </header>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -70,7 +138,6 @@ export function Header() {
               onClick={() => setMobileOpen(false)}
             />
 
-            {/* Drawer */}
             <motion.div
               initial={{ y: -24, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -78,11 +145,11 @@ export function Header() {
               transition={{ duration: 0.25, ease: "easeOut" as const }}
               className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-border"
             >
-              <div className="flex items-center justify-between px-4 sm:px-6 h-16">
+              <div className="flex items-center justify-between px-4 sm:px-6 h-20">
                 <img
                   src={ciedLogo}
                   alt="CIED IUST Foundation"
-                  className="h-11"
+                  className="h-14 w-auto"
                 />
                 <button
                   onClick={() => setMobileOpen(false)}
@@ -93,18 +160,46 @@ export function Header() {
                 </button>
               </div>
 
-              <div className="px-6 py-6 flex flex-col gap-5">
-                {navLinks.map((link, index) => (
+              <div className="px-6 py-6 flex flex-col gap-3">
+                {primaryLinks.map((link) => (
                   <Link
-                    key={index}
+                    key={link.to}
                     to={link.to}
-                    onClick={() => setMobileOpen(false)}
-                    className="text-lg text-primary hover:text-secondary transition-colors"
+                    className="text-lg text-primary hover:text-secondary transition-colors py-1"
                   >
                     {link.name}
                   </Link>
                 ))}
 
+                <div className="pt-2 border-t border-border">
+                  <button
+                    type="button"
+                    onClick={() => setMobileMoreOpen((current) => !current)}
+                    className="w-full flex items-center justify-between text-lg text-primary hover:text-secondary transition-colors py-1"
+                    aria-expanded={mobileMoreOpen}
+                  >
+                    More
+                    <ChevronDown
+                      className={`h-5 w-5 transition-transform ${
+                        mobileMoreOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {mobileMoreOpen && (
+                    <div className="mt-3 pl-1 flex flex-col gap-3">
+                      {moreLinks.map((link) => (
+                        <Link
+                          key={link.to}
+                          to={link.to}
+                          className="text-base text-muted-foreground hover:text-primary transition-colors"
+                        >
+                          {link.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </motion.div>
           </>
@@ -113,4 +208,3 @@ export function Header() {
     </>
   );
 }
-

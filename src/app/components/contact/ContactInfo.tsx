@@ -38,11 +38,10 @@ const contactInfo: ContactCard[] = [
     title: "Phone",
     icon: <Phone className="h-6 w-6" />,
     content: [
-      "+91 1933 247955",
-      "+91 1933 247956",
+      "Office Contact: +91 (01933) 247954",
       "Mon to Fri, 9:00 AM to 5:00 PM",
     ],
-    link: "tel:+911933247955",
+    link: "tel:+911933247954",
     linkType: "tel",
   },
 ];
@@ -66,6 +65,17 @@ const cardVariants = {
 };
 
 export function ContactInfo() {
+  const handleContactAction = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    link: string,
+    linkType?: ContactCard["linkType"]
+  ) => {
+    if (linkType === "email" || linkType === "tel") {
+      event.preventDefault();
+      window.location.assign(link);
+    }
+  };
+
   return (
     <section className="py-14 sm:py-18 lg:py-20 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -102,17 +112,34 @@ export function ContactInfo() {
                   {/* Content */}
                   <div className="space-y-2 text-sm sm:text-base flex-grow">
                     {info.content.map((line, lineIndex) => (
-                      <p
-                        key={lineIndex}
-                        className={`text-muted-foreground ${
-                          lineIndex === info.content.length - 1 &&
-                          info.linkType === "tel"
-                            ? "text-xs sm:text-sm mt-4 pt-4 border-t border-border"
-                            : ""
-                        }`}
-                      >
-                        {line}
-                      </p>
+                      <div key={lineIndex}>
+                        {info.linkType === "email" && line.includes("@") ? (
+                          <a
+                            href={`mailto:${line}`}
+                            onClick={(event) =>
+                              handleContactAction(
+                                event,
+                                `mailto:${line}`,
+                                info.linkType
+                              )
+                            }
+                            className="text-muted-foreground hover:text-primary transition-colors"
+                          >
+                            {line}
+                          </a>
+                        ) : (
+                          <p
+                            className={`text-muted-foreground ${
+                              lineIndex === info.content.length - 1 &&
+                              info.linkType === "tel"
+                                ? "text-xs sm:text-sm mt-4 pt-4 border-t border-border"
+                                : ""
+                            }`}
+                          >
+                            {line}
+                          </p>
+                        )}
+                      </div>
                     ))}
                   </div>
 
@@ -120,6 +147,9 @@ export function ContactInfo() {
                   {info.link && (
                     <a
                       href={info.link}
+                      onClick={(event) =>
+                        handleContactAction(event, info.link!, info.linkType)
+                      }
                       target={info.linkType === "map" ? "_blank" : undefined}
                       rel={
                         info.linkType === "map"

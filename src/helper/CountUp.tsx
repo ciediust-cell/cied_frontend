@@ -5,10 +5,16 @@ import { animate } from "framer-motion";
 interface CountUpProps {
   value: number;
   duration?: number;
+  decimals?: number;
   suffix?: string;
 }
 
-export function CountUp({ value, duration = 1.5, suffix = "" }: CountUpProps) {
+export function CountUp({
+  value,
+  duration = 1.5,
+  decimals = 0,
+  suffix = "",
+}: CountUpProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const [count, setCount] = useState(0);
   const hasAnimated = useRef(false);
@@ -25,7 +31,8 @@ export function CountUp({ value, duration = 1.5, suffix = "" }: CountUpProps) {
             duration,
             ease: "easeOut" as const,
             onUpdate(latest) {
-              setCount(Math.floor(latest));
+              const factor = 10 ** decimals;
+              setCount(Math.floor(latest * factor) / factor);
             },
           });
         }
@@ -40,7 +47,7 @@ export function CountUp({ value, duration = 1.5, suffix = "" }: CountUpProps) {
 
   return (
     <span ref={ref}>
-      {count}
+      {count.toFixed(decimals)}
       {suffix}
     </span>
   );

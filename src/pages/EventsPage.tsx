@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import { useSearchParams } from "react-router-dom";
 import { EventCalendar } from "src/app/components/news/EventCalender";
 import { FeaturedCard } from "src/app/components/news/FeaturedCard";
 import { FilterBar } from "src/app/components/news/FilterBar";
@@ -62,6 +63,7 @@ const toEventItem = (event: PublicEventItem): NewsItem => ({
 });
 
 export function EventsPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedEvent, setSelectedEvent] = useState<NewsItem | null>(null);
@@ -69,6 +71,22 @@ export function EventsPage() {
   const [eventItems, setEventItems] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+  const sharedEventSlug = searchParams.get("event");
+
+  const syncSharedEventSlug = (slug: string | null) => {
+    setSearchParams(
+      (current) => {
+        const next = new URLSearchParams(current);
+        if (slug) {
+          next.set("event", slug);
+        } else {
+          next.delete("event");
+        }
+        return next;
+      },
+      { replace: true }
+    );
+  };
 
   useEffect(() => {
     const loadEvents = async () => {
@@ -119,6 +137,9 @@ export function EventsPage() {
 
   const handleOpenEvent = async (item: NewsItem) => {
     setSelectedEvent(item);
+    if (item.slug) {
+      syncSharedEventSlug(item.slug);
+    }
 
     if (!item.slug) return;
 
@@ -143,6 +164,42 @@ export function EventsPage() {
       // Keep current card data if detail fetch fails.
     }
   };
+
+  useEffect(() => {
+    if (!sharedEventSlug) return;
+
+    const matchingItem = eventItems.find((item) => item.slug === sharedEventSlug);
+    if (matchingItem) {
+      if (selectedEvent?.slug !== sharedEventSlug) {
+        setSelectedEvent(matchingItem);
+      }
+      return;
+    }
+
+    if (loading) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const loadSharedEvent = async () => {
+      try {
+        const details = await getPublicEventBySlug(sharedEventSlug);
+        if (cancelled) return;
+        setSelectedEvent(toEventItem(details));
+      } catch {
+        if (cancelled) return;
+        setError("Unable to open the shared event.");
+        syncSharedEventSlug(null);
+      }
+    };
+
+    void loadSharedEvent();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [eventItems, loading, selectedEvent?.slug, sharedEventSlug]);
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
@@ -273,7 +330,10 @@ export function EventsPage() {
       {selectedEvent && (
         <NewsDetailModal
           item={selectedEvent}
-          onClose={() => setSelectedEvent(null)}
+          onClose={() => {
+            setSelectedEvent(null);
+            syncSharedEventSlug(null);
+          }}
         />
       )}
     </div>

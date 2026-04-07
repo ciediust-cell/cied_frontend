@@ -5,75 +5,94 @@ interface RouteSeo {
   title: string;
   description: string;
   canonicalPath: string;
+  robots?: string;
 }
 
 const DEFAULT_SEO: RouteSeo = {
-  title: "CIED",
+  title: "CIED IUST",
   description:
     "Centre for Innovation and Entrepreneurship Development (CIED), IUST. Explore programs, events, gallery, startup portfolio, and community initiatives.",
   canonicalPath: "/",
+  robots: "index,follow",
 };
 
 const ROUTE_SEO: Record<string, RouteSeo> = {
   "/": {
-    title: "CIED",
+    title: "CIED IUST | Innovation & Entrepreneurship Development",
     description:
       "Centre for Innovation and Entrepreneurship Development (CIED), IUST. Supporting innovation, startups, incubation, and entrepreneurship.",
     canonicalPath: "/",
+    robots: "index,follow",
   },
   "/aboutUs": {
-    title: "About CIED",
+    title: "About CIED IUST | Mission, Vision & Leadership",
     description:
       "Learn about CIED at IUST, our mission, leadership, objectives, and impact in building a strong entrepreneurship ecosystem.",
     canonicalPath: "/aboutUs",
+    robots: "index,follow",
   },
   "/programs": {
-    title: "Programs | CIED",
+    title: "Programs | CIED IUST",
     description:
       "Explore CIED programs, incubation support, mentoring, infrastructure, and opportunities for students, startups, and innovators.",
     canonicalPath: "/programs",
+    robots: "index,follow",
   },
   "/portfolio": {
-    title: "Startup Portfolio | CIED",
+    title: "Startup Portfolio | CIED IUST",
     description:
       "Discover startups supported by CIED and their innovations across diverse sectors and domains.",
     canonicalPath: "/portfolio",
+    robots: "index,follow",
   },
   "/members": {
-    title: "Members & Recognition | CIED",
+    title: "Members | CIED IUST",
     description:
-      "Meet the CIED leadership and members, and explore recognitions, milestones, and achievements.",
+      "Meet the CIED leadership, mentors, advisors, and members contributing to the entrepreneurship ecosystem at IUST.",
     canonicalPath: "/members",
+    robots: "index,follow",
+  },
+  "/recognition": {
+    title: "Recognition | CIED IUST",
+    description:
+      "Explore awards, milestones, and recognitions received by CIED for its impact on innovation and entrepreneurship.",
+    canonicalPath: "/recognition",
+    robots: "index,follow",
   },
   "/news": {
-    title: "News | CIED",
+    title: "News | CIED IUST",
     description:
       "Read the latest updates, announcements, and stories from CIED and the startup ecosystem.",
     canonicalPath: "/news",
+    robots: "index,follow",
   },
   "/events": {
-    title: "Events | CIED",
+    title: "Events | CIED IUST",
     description:
       "Browse CIED events, workshops, and opportunities for networking, learning, and collaboration.",
     canonicalPath: "/events",
+    robots: "index,follow",
   },
   "/gallery": {
-    title: "Gallery | CIED",
+    title: "Gallery | CIED IUST",
     description:
       "View moments from CIED events, workshops, programs, and startup activities in our gallery.",
     canonicalPath: "/gallery",
+    robots: "index,follow",
   },
   "/contactUs": {
-    title: "Contact CIED",
+    title: "Contact CIED IUST",
     description:
       "Get in touch with CIED at IUST for programs, incubation support, partnerships, and general inquiries.",
     canonicalPath: "/contactUs",
+    robots: "index,follow",
   },
   "/coming-soon": {
-    title: "Coming Soon | CIED",
+    title: "Coming Soon | CIED IUST",
     description:
       "This section of the CIED website is currently under development. Please check back soon for updates.",
     canonicalPath: "/coming-soon",
+    robots: "noindex,follow",
   },
 };
 
@@ -141,18 +160,23 @@ export function SeoManager() {
 
     document.title = routeSeo.title;
     upsertMetaByName("description", routeSeo.description);
+    upsertMetaByName("robots", routeSeo.robots || DEFAULT_SEO.robots || "index,follow");
     upsertCanonical(canonicalUrl);
 
     upsertMetaByProperty("og:type", "website");
+    upsertMetaByProperty("og:locale", "en_IN");
     upsertMetaByProperty("og:site_name", "CIED");
     upsertMetaByProperty("og:title", routeSeo.title);
     upsertMetaByProperty("og:description", routeSeo.description);
     upsertMetaByProperty("og:url", canonicalUrl);
     upsertMetaByProperty("og:image", ogImageUrl);
+    upsertMetaByProperty("og:image:alt", "CIED IUST logo");
 
     upsertMetaByName("twitter:card", "summary_large_image");
+    upsertMetaByName("twitter:site", "@CIED_IUST");
     upsertMetaByName("twitter:title", routeSeo.title);
     upsertMetaByName("twitter:description", routeSeo.description);
+    upsertMetaByName("twitter:url", canonicalUrl);
     upsertMetaByName("twitter:image", ogImageUrl);
   }, [pathname]);
 

@@ -7,9 +7,10 @@ import { ContactPage } from "src/pages/ContactPage";
 import { EventsPage } from "src/pages/EventsPage";
 import { GalleryPage } from "src/pages/GalleryPage";
 import Home from "src/pages/Home";
-import { MembersRecognitionPage } from "src/pages/MembersRecognitionPage";
+import { MembersPage } from "src/pages/MembersPage";
 import { NewsPage } from "src/pages/NewsPage";
 import { ProgramsPage } from "src/pages/ProgramsPage";
+import { RecognitionPage } from "src/pages/RecognitionPage";
 import { StartupPortfolioPage } from "src/pages/StartupPortfolioPage";
 // import About from "./pages/About";
 // import Programs from "./pages/Programs";
@@ -26,7 +27,8 @@ export default function App() {
           <Route path="/aboutUs" element={<AboutPage />} />
           <Route path="/programs" element={<ProgramsPage />} />
           <Route path="/portfolio" element={<StartupPortfolioPage />} />
-          <Route path="/members" element={<MembersRecognitionPage />} />
+          <Route path="/members" element={<MembersPage />} />
+          <Route path="/recognition" element={<RecognitionPage />} />
           <Route path="/contactUs" element={<ContactPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/coming-soon" element={<ComingSoonPage />} />

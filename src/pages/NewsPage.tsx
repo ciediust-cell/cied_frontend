@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import { useSearchParams } from "react-router-dom";
 import { FeaturedCard } from "src/app/components/news/FeaturedCard";
 import { FilterBar } from "src/app/components/news/FilterBar";
 import { NewsDetailModal } from "src/app/components/news/NewsDetailModal";
@@ -27,6 +28,8 @@ type PublicNewsListItem = {
   publishedAt: string | null;
 };
 
+type PublicNewsDetailItem = Awaited<ReturnType<typeof getPublicNewsBySlug>>;
+
 const formatNewsDate = (newsDate: string | null, publishedAt?: string | null) => {
   const source = newsDate || publishedAt;
   if (!source) return "Date TBA";
@@ -51,7 +54,54 @@ const toNewsItem = (item: PublicNewsListItem): NewsItem => ({
   images: item.featuredImage ? [item.featuredImage] : ["/ciedLogo.jpeg"],
 });
 
+const getNewsImages = (item: Pick<PublicNewsDetailItem, "featuredImage" | "galleryImages">) => {
+  const linkedGalleryImages = Array.isArray(item.galleryImages)
+    ? item.galleryImages
+        .map((galleryImage) => galleryImage.imageUrl)
+        .filter((imageUrl): imageUrl is string => Boolean(imageUrl))
+    : [];
+
+  return Array.from(
+    new Set(
+      [item.featuredImage, ...linkedGalleryImages].filter(
+        (imageUrl): imageUrl is string => Boolean(imageUrl)
+      )
+    )
+  );
+};
+
+const applyNewsDetails = (item: NewsItem, details: PublicNewsDetailItem): NewsItem => {
+  const mergedImages = getNewsImages(details);
+
+  return {
+    ...item,
+    slug: details.slug,
+    summary: details.excerpt || item.summary,
+    description: details.content || details.excerpt || item.description,
+    date: formatNewsDate(details.newsDate, details.publishedAt),
+    linkedGalleryId: details.galleryId,
+    images: mergedImages.length > 0 ? mergedImages : item.images,
+  };
+};
+
+const toNewsDetailItem = (details: PublicNewsDetailItem): NewsItem => {
+  const mergedImages = getNewsImages(details);
+
+  return {
+    id: details.id,
+    slug: details.slug,
+    linkedGalleryId: details.galleryId,
+    category: "News",
+    title: details.title,
+    summary: details.excerpt,
+    description: details.content || details.excerpt,
+    date: formatNewsDate(details.newsDate, details.publishedAt),
+    images: mergedImages.length > 0 ? mergedImages : ["/ciedLogo.jpeg"],
+  };
+};
+
 export function NewsPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
@@ -64,6 +114,25 @@ export function NewsPage() {
   >([]);
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(false);
+  const [hydratedSharedNewsSlug, setHydratedSharedNewsSlug] = useState<string | null>(
+    null
+  );
+  const sharedNewsSlug = searchParams.get("news");
+
+  const syncSharedNewsSlug = (slug: string | null) => {
+    setSearchParams(
+      (current) => {
+        const next = new URLSearchParams(current);
+        if (slug) {
+          next.set("news", slug);
+        } else {
+          next.delete("news");
+        }
+        return next;
+      },
+      { replace: true }
+    );
+  };
 
   const loadPage = async (targetPage: number) => {
     const response = await getPublicNews(targetPage, PAGE_SIZE);
@@ -132,6 +201,9 @@ export function NewsPage() {
 
   const handleOpenNews = async (item: NewsItem) => {
     setSelectedNews(item);
+    if (item.slug) {
+      syncSharedNewsSlug(item.slug);
+    }
 
     if (!item.slug) return;
 
@@ -139,34 +211,76 @@ export function NewsPage() {
       const details = await getPublicNewsBySlug(item.slug);
       setSelectedNews((current) => {
         if (!current || current.id !== item.id) return current;
-
-        const linkedGalleryImages = Array.isArray(details.galleryImages)
-          ? details.galleryImages
-              .map((galleryImage) => galleryImage.imageUrl)
-              .filter((imageUrl): imageUrl is string => Boolean(imageUrl))
-          : [];
-
-        const mergedImages = Array.from(
-          new Set(
-            [details.featuredImage, ...linkedGalleryImages].filter(
-              (imageUrl): imageUrl is string => Boolean(imageUrl),
-            ),
-          ),
-        );
-
-        return {
-          ...current,
-          summary: details.excerpt || current.summary,
-          description: details.content || details.excerpt || current.description,
-          date: formatNewsDate(details.newsDate, details.publishedAt),
-          linkedGalleryId: details.galleryId,
-          images: mergedImages.length > 0 ? mergedImages : current.images,
-        };
+        return applyNewsDetails(current, details);
       });
+      setHydratedSharedNewsSlug(item.slug);
     } catch {
       // Keep card data in modal when detail fetch fails.
     }
   };
+
+  useEffect(() => {
+    if (!sharedNewsSlug) return;
+
+    const matchingItem = newsItems.find((item) => item.slug === sharedNewsSlug);
+
+    if (matchingItem) {
+      if (selectedNews?.slug !== sharedNewsSlug) {
+        setSelectedNews(matchingItem);
+      }
+
+      if (hydratedSharedNewsSlug === sharedNewsSlug) {
+        return;
+      }
+
+      let cancelled = false;
+
+      const loadSharedNewsDetails = async () => {
+        try {
+          const details = await getPublicNewsBySlug(sharedNewsSlug);
+          if (cancelled) return;
+          setSelectedNews((current) => {
+            if (!current || current.slug !== sharedNewsSlug) return current;
+            return applyNewsDetails(current, details);
+          });
+          setHydratedSharedNewsSlug(sharedNewsSlug);
+        } catch {
+          // Keep the list item data if detail hydration fails.
+        }
+      };
+
+      void loadSharedNewsDetails();
+
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    if (loading) {
+      return;
+    }
+
+    let cancelled = false;
+
+    const loadSharedNews = async () => {
+      try {
+        const details = await getPublicNewsBySlug(sharedNewsSlug);
+        if (cancelled) return;
+        setSelectedNews(toNewsDetailItem(details));
+        setHydratedSharedNewsSlug(sharedNewsSlug);
+      } catch {
+        if (cancelled) return;
+        setError("Unable to open the shared news item.");
+        syncSharedNewsSlug(null);
+      }
+    };
+
+    void loadSharedNews();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [hydratedSharedNewsSlug, loading, newsItems, selectedNews?.slug, sharedNewsSlug]);
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
@@ -278,7 +392,11 @@ export function NewsPage() {
       {selectedNews && (
         <NewsDetailModal
           item={selectedNews}
-          onClose={() => setSelectedNews(null)}
+          onClose={() => {
+            setSelectedNews(null);
+            setHydratedSharedNewsSlug(null);
+            syncSharedNewsSlug(null);
+          }}
         />
       )}
     </div>

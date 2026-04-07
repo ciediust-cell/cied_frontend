@@ -10,6 +10,25 @@ import { Link } from "react-router-dom";
 import ciedLogo from "/ciedLogo.jpeg";
 
 export function Footer() {
+  const currentYear = new Date().getFullYear();
+  const socialLinks = [
+    {
+      label: "Instagram",
+      href: "https://www.instagram.com/cied_iust/",
+      icon: Instagram,
+    },
+    {
+      label: "Twitter",
+      href: "https://x.com/CIED_IUST",
+      icon: Twitter,
+    },
+    {
+      label: "LinkedIn",
+      href: "https://www.linkedin.com/company/ciediust/",
+      icon: Linkedin,
+    },
+  ];
+
   return (
     <footer className="bg-primary text-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16">
@@ -55,7 +74,15 @@ export function Footer() {
                   to="/members"
                   className="text-white/70 hover:text-secondary transition-colors"
                 >
-                  Members & Recognition
+                  Members
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/recognition"
+                  className="text-white/70 hover:text-secondary transition-colors"
+                >
+                  Recognition
                 </Link>
               </li>
               <li>
@@ -138,10 +165,10 @@ export function Footer() {
               <li className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-secondary flex-shrink-0" />
                 <a
-                  href="tel:+911933247955"
+                  href="tel:+911933247954"
                   className="text-white/70 hover:text-secondary transition-colors"
                 >
-                  +91 1933 247955
+                  Office Contact: +91 (01933) 247954
                 </a>
               </li>
               <li className="flex items-center gap-3">
@@ -160,32 +187,28 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-xs sm:text-sm text-white/70 text-center sm:text-left">
-            &copy; 2026 CIED IUST Foundation. All rights reserved.
+            &copy; {currentYear} CIED IUST Foundation. All rights reserved.
           </p>
 
-          <div className="flex gap-3">
-            <a
-              href="#"
-              className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary transition-colors"
-              aria-label="Instagram"
-            >
-              <Instagram className="h-5 w-5" />
-            </a>
-            <a
-              href="#"
-              className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary transition-colors"
-              aria-label="Twitter"
-            >
-              <Twitter className="h-5 w-5" />
-            </a>
-            <a
-              href="#"
-              className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary transition-colors"
-              aria-label="LinkedIn"
-            >
-              <Linkedin className="h-5 w-5" />
-            </a>
-          </div>
+          {socialLinks.length > 0 && (
+            <div className="flex gap-3">
+              {socialLinks.map((link) => {
+                const Icon = link.icon;
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary transition-colors"
+                    aria-label={`Visit CIED on ${link.label}`}
+                  >
+                    <Icon className="h-5 w-5" />
+                  </a>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </footer>

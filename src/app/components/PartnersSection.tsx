@@ -1,6 +1,6 @@
+import { ArrowUpRight, Quote } from "lucide-react";
 import { RotatingTypewriterHeading } from "src/helper/RotatingTypewriterHeading";
 import { Card, CardContent } from "./ui/card";
-import { Quote } from "lucide-react";
 
 const testimonials = [
   {
@@ -27,19 +27,116 @@ const testimonials = [
 ];
 
 const partners = [
-  { name: "IIT Delhi", logo: "IIT" },
-  { name: "NASSCOM", logo: "NASSCOM" },
-  { name: "StartupIndia", logo: "StartupIndia" },
-  { name: "Google", logo: "Google" },
-  { name: "Microsoft", logo: "Microsoft" },
-  { name: "AWS", logo: "AWS" },
-];
+  {
+    name: "IIT Delhi",
+    href: "https://home.iitd.ac.in/",
+    description: "Academic innovation partner",
+  },
+  {
+    name: "NASSCOM",
+    href: "https://nasscom.in/",
+    description: "Technology ecosystem partner",
+  },
+  {
+    name: "Startup India",
+    href: "https://www.startupindia.gov.in/",
+    description: "National startup initiative",
+  },
+  {
+    name: "Google",
+    href: "https://www.google.com/",
+    description: "Technology partner",
+  },
+  {
+    name: "Microsoft",
+    href: "https://www.microsoft.com/en-us/",
+    description: "Cloud and productivity partner",
+  },
+  {
+    name: "AWS",
+    href: "https://aws.amazon.com/",
+    description: "Cloud infrastructure partner",
+  },
+] as const;
+
+function PartnerLogo({ name }: { name: (typeof partners)[number]["name"] }) {
+  switch (name) {
+    case "Google":
+      return (
+        <div
+          className="flex items-baseline text-[1.9rem] font-semibold tracking-tight"
+          aria-hidden="true"
+        >
+          <span style={{ color: "#4285F4" }}>G</span>
+          <span style={{ color: "#EA4335" }}>o</span>
+          <span style={{ color: "#FBBC05" }}>o</span>
+          <span style={{ color: "#4285F4" }}>g</span>
+          <span style={{ color: "#34A853" }}>l</span>
+          <span style={{ color: "#EA4335" }}>e</span>
+        </div>
+      );
+    case "Microsoft":
+      return (
+        <div className="flex items-center gap-3" aria-hidden="true">
+          <div className="grid grid-cols-2 gap-1">
+            <span className="h-3.5 w-3.5 bg-[#F25022]" />
+            <span className="h-3.5 w-3.5 bg-[#7FBA00]" />
+            <span className="h-3.5 w-3.5 bg-[#00A4EF]" />
+            <span className="h-3.5 w-3.5 bg-[#FFB900]" />
+          </div>
+          <span className="text-[1.45rem] font-semibold tracking-tight text-[#5E5E5E]">
+            Microsoft
+          </span>
+        </div>
+      );
+    case "AWS":
+      return (
+        <div className="flex flex-col items-center" aria-hidden="true">
+          <span className="text-[1.7rem] font-bold tracking-tight text-[#232F3E]">
+            aws
+          </span>
+          <span className="mt-1 h-1.5 w-14 rounded-full bg-[#FF9900]" />
+        </div>
+      );
+    case "Startup India":
+      return (
+        <div className="text-center leading-none" aria-hidden="true">
+          <div className="text-[1.1rem] font-semibold tracking-[0.18em] text-[#1C75BC] uppercase">
+            Startup
+          </div>
+          <div className="mt-1 text-[1.45rem] font-bold tracking-[0.22em] text-[#1FAA59] uppercase">
+            India
+          </div>
+        </div>
+      );
+    case "NASSCOM":
+      return (
+        <div className="text-center" aria-hidden="true">
+          <span className="text-[1.45rem] font-bold tracking-[0.22em] text-[#1E5AA8] uppercase">
+            NASSCOM
+          </span>
+        </div>
+      );
+    case "IIT Delhi":
+      return (
+        <div className="text-center leading-tight" aria-hidden="true">
+          <div className="text-[1.35rem] font-bold tracking-[0.28em] text-[#7A0019] uppercase">
+            IIT
+          </div>
+          <div className="mt-1 text-sm font-semibold tracking-[0.28em] text-[#B8860B] uppercase">
+            Delhi
+          </div>
+        </div>
+      );
+    default:
+      return null;
+  }
+}
 
 export function PartnersSection() {
   return (
     <section className="py-24 bg-gradient-to-b from-muted/30 to-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Testimonials */}
         <div className="mb-20">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <div className="inline-block px-4 py-2 bg-accent/10 rounded-full mb-6">
@@ -80,7 +177,6 @@ export function PartnersSection() {
           </div>
         </div>
 
-        {/* Partners */}
         <div>
           <div className="text-center mb-12">
             <div className="text-3xl mb-4 text-primary">
@@ -92,16 +188,36 @@ export function PartnersSection() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
-            {partners.map((partner, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-center h-24 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border border-border"
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {partners.map((partner) => (
+              <a
+                key={partner.name}
+                href={partner.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Visit ${partner.name} official website`}
+                className="group block h-full rounded-2xl border border-border bg-white p-6 shadow-md transition-all hover:-translate-y-1 hover:shadow-xl"
               >
-                <span className="text-2xl text-muted-foreground/50">
-                  {partner.logo}
-                </span>
-              </div>
+                <div className="flex min-h-[9rem] flex-col justify-between gap-5">
+                  <div className="flex min-h-[4.5rem] items-center justify-center">
+                    <PartnerLogo name={partner.name} />
+                  </div>
+
+                  <div className="flex items-center justify-between gap-3 border-t border-border/70 pt-4">
+                    <div>
+                      <p className="text-sm font-medium text-primary">
+                        {partner.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {partner.description}
+                      </p>
+                    </div>
+                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary/8 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+                      <ArrowUpRight className="h-4 w-4" />
+                    </span>
+                  </div>
+                </div>
+              </a>
             ))}
           </div>
         </div>
