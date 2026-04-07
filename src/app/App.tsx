@@ -1,43 +1,77 @@
+import { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import { ScrollToTop } from "src/helper/scrollToTop";
 import Layout from "src/layout/Layout";
-import { AboutPage } from "src/pages/AboutPage";
-import { ComingSoonPage } from "src/pages/ComingSoonPage";
-import { ContactPage } from "src/pages/ContactPage";
-import { EventsPage } from "src/pages/EventsPage";
-import { GalleryPage } from "src/pages/GalleryPage";
 import Home from "src/pages/Home";
-import { MembersPage } from "src/pages/MembersPage";
-import { NewsPage } from "src/pages/NewsPage";
-import { ProgramsPage } from "src/pages/ProgramsPage";
-import { RecognitionPage } from "src/pages/RecognitionPage";
-import { StartupPortfolioPage } from "src/pages/StartupPortfolioPage";
-// import About from "./pages/About";
-// import Programs from "./pages/Programs";
+
+const AboutPage = lazy(() =>
+  import("src/pages/AboutPage").then((module) => ({ default: module.AboutPage }))
+);
+const ComingSoonPage = lazy(() =>
+  import("src/pages/ComingSoonPage").then((module) => ({
+    default: module.ComingSoonPage,
+  }))
+);
+const ContactPage = lazy(() =>
+  import("src/pages/ContactPage").then((module) => ({
+    default: module.ContactPage,
+  }))
+);
+const EventsPage = lazy(() =>
+  import("src/pages/EventsPage").then((module) => ({ default: module.EventsPage }))
+);
+const GalleryPage = lazy(() =>
+  import("src/pages/GalleryPage").then((module) => ({ default: module.GalleryPage }))
+);
+const MembersPage = lazy(() =>
+  import("src/pages/MembersPage").then((module) => ({ default: module.MembersPage }))
+);
+const NewsPage = lazy(() =>
+  import("src/pages/NewsPage").then((module) => ({ default: module.NewsPage }))
+);
+const ProgramsPage = lazy(() =>
+  import("src/pages/ProgramsPage").then((module) => ({ default: module.ProgramsPage }))
+);
+const RecognitionPage = lazy(() =>
+  import("src/pages/RecognitionPage").then((module) => ({
+    default: module.RecognitionPage,
+  }))
+);
+const StartupPortfolioPage = lazy(() =>
+  import("src/pages/StartupPortfolioPage").then((module) => ({
+    default: module.StartupPortfolioPage,
+  }))
+);
+
+function RouteFallback() {
+  return (
+    <div className="min-h-[40vh] flex items-center justify-center px-4 py-16 text-muted-foreground">
+      Loading...
+    </div>
+  );
+}
 
 export default function App() {
   return (
     <>
       <ScrollToTop />
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/news" element={<NewsPage />} />
-          <Route path="/events" element={<EventsPage />} />
-          <Route path="/aboutUs" element={<AboutPage />} />
-          <Route path="/programs" element={<ProgramsPage />} />
-          <Route path="/portfolio" element={<StartupPortfolioPage />} />
-          <Route path="/members" element={<MembersPage />} />
-          <Route path="/recognition" element={<RecognitionPage />} />
-          <Route path="/contactUs" element={<ContactPage />} />
-          <Route path="/gallery" element={<GalleryPage />} />
-          <Route path="/coming-soon" element={<ComingSoonPage />} />
-
-          {/* Add more pages here */}
-          {/* <Route path="/about" element={<About />} /> */}
-          {/* <Route path="/programs" element={<Programs />} /> */}
-        </Route>
-      </Routes>
+      <Suspense fallback={<RouteFallback />}>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/news" element={<NewsPage />} />
+            <Route path="/events" element={<EventsPage />} />
+            <Route path="/aboutUs" element={<AboutPage />} />
+            <Route path="/programs" element={<ProgramsPage />} />
+            <Route path="/portfolio" element={<StartupPortfolioPage />} />
+            <Route path="/members" element={<MembersPage />} />
+            <Route path="/recognition" element={<RecognitionPage />} />
+            <Route path="/contactUs" element={<ContactPage />} />
+            <Route path="/gallery" element={<GalleryPage />} />
+            <Route path="/coming-soon" element={<ComingSoonPage />} />
+          </Route>
+        </Routes>
+      </Suspense>
     </>
   );
 }

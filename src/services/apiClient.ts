@@ -8,6 +8,7 @@ interface ApiRequestOptions extends Omit<RequestInit, "method" | "body"> {
   body?: unknown;
   timeoutMs?: number;
   retries?: number;
+  cacheTtlMs?: number;
 }
 
 interface ApiErrorPayload {
@@ -20,6 +21,17 @@ const DEV_API_BASE_URL = "https://cied-backend.vercel.app";
 const DEFAULT_TIMEOUT_MS = Number(import.meta.env.VITE_PUBLIC_API_TIMEOUT_MS) || 10000;
 const DEFAULT_RETRIES = Number(import.meta.env.VITE_PUBLIC_API_RETRIES) || 2;
 const RETRY_BASE_DELAY_MS = Number(import.meta.env.VITE_PUBLIC_API_RETRY_DELAY_MS) || 400;
+const DEFAULT_GET_CACHE_TTL_MS =
+  Number(import.meta.env.VITE_PUBLIC_API_CACHE_TTL_MS) || 5 * 60 * 1000;
+const CACHE_PREFIX = "cied_api_cache:";
+
+type CacheEntry = {
+  expiresAt: number;
+  data: unknown;
+};
+
+const memoryCache = new Map<string, CacheEntry>();
+const pendingGetRequests = new Map<string, Promise<unknown>>();
 
 const parseBaseUrl = () => {
   const configured = (import.meta.env.VITE_PUBLIC_API_BASE_URL as string | undefined)
@@ -38,6 +50,8 @@ const parseBaseUrl = () => {
 };
 
 const API_BASE_URL = parseBaseUrl();
+
+const isBrowser = typeof window !== "undefined";
 
 class ApiError extends Error {
   status: number;
@@ -120,6 +134,56 @@ const getPayloadRequestId = (payload: unknown) => {
 
 const shouldRetryStatus = (status: number) => status === 429 || status >= 500;
 
+const getCacheEntry = (key: string) => {
+  const now = Date.now();
+  const memoryEntry = memoryCache.get(key);
+
+  if (memoryEntry && memoryEntry.expiresAt > now) {
+    return memoryEntry.data;
+  }
+
+  if (memoryEntry) {
+    memoryCache.delete(key);
+  }
+
+  if (!isBrowser) {
+    return undefined;
+  }
+
+  try {
+    const raw = window.sessionStorage.getItem(`${CACHE_PREFIX}${key}`);
+    if (!raw) return undefined;
+    const parsed = JSON.parse(raw) as CacheEntry;
+    if (parsed.expiresAt <= now) {
+      window.sessionStorage.removeItem(`${CACHE_PREFIX}${key}`);
+      return undefined;
+    }
+    memoryCache.set(key, parsed);
+    return parsed.data;
+  } catch {
+    return undefined;
+  }
+};
+
+const setCacheEntry = (key: string, data: unknown, ttlMs: number) => {
+  const entry: CacheEntry = {
+    expiresAt: Date.now() + ttlMs,
+    data,
+  };
+
+  memoryCache.set(key, entry);
+
+  if (!isBrowser) {
+    return;
+  }
+
+  try {
+    window.sessionStorage.setItem(`${CACHE_PREFIX}${key}`, JSON.stringify(entry));
+  } catch {
+    // Ignore cache write issues such as quota limits.
+  }
+};
+
 const normalizeError = (error: unknown) => {
   if (error instanceof ApiError) return error;
 
@@ -142,68 +206,97 @@ export async function apiRequest<T>(
     body,
     timeoutMs = DEFAULT_TIMEOUT_MS,
     retries = DEFAULT_RETRIES,
+    cacheTtlMs = DEFAULT_GET_CACHE_TTL_MS,
     headers,
     ...rest
   }: ApiRequestOptions = {}
 ): Promise<T> {
   const url = buildUrl(path, query);
+  const cacheKey = method === "GET" ? url : undefined;
+
+  if (cacheKey && cacheTtlMs > 0) {
+    const cached = getCacheEntry(cacheKey);
+    if (cached !== undefined) {
+      return cached as T;
+    }
+
+    const pendingRequest = pendingGetRequests.get(cacheKey);
+    if (pendingRequest) {
+      return pendingRequest as Promise<T>;
+    }
+  }
+
   const finalHeaders = new Headers(headers);
 
   if (body !== undefined && !finalHeaders.has("Content-Type")) {
     finalHeaders.set("Content-Type", "application/json");
   }
 
-  for (let attempt = 0; attempt <= retries; attempt += 1) {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  const requestPromise = (async () => {
+    for (let attempt = 0; attempt <= retries; attempt += 1) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
-    try {
-      const response = await fetch(url, {
-        ...rest,
-        method,
-        headers: finalHeaders,
-        body: body === undefined ? undefined : JSON.stringify(body),
-        signal: controller.signal,
-      });
-      clearTimeout(timeout);
+      try {
+        const response = await fetch(url, {
+          ...rest,
+          method,
+          headers: finalHeaders,
+          body: body === undefined ? undefined : JSON.stringify(body),
+          signal: controller.signal,
+        });
+        clearTimeout(timeout);
 
-      const payload = await parseResponseBody(response);
-      if (response.ok) {
-        return payload as T;
+        const payload = await parseResponseBody(response);
+        if (response.ok) {
+          if (cacheKey && cacheTtlMs > 0) {
+            setCacheEntry(cacheKey, payload, cacheTtlMs);
+          }
+          return payload as T;
+        }
+
+        const requestId =
+          response.headers.get("X-Request-Id") || getPayloadRequestId(payload);
+        const error = new ApiError(
+          getPayloadMessage(payload, "Request failed"),
+          response.status,
+          payload,
+          requestId,
+          parseRetryAfterMs(response.headers.get("Retry-After"))
+        );
+
+        if (attempt < retries && shouldRetryStatus(error.status)) {
+          const delay =
+            error.retryAfterMs ?? RETRY_BASE_DELAY_MS * Math.max(1, attempt + 1);
+          await wait(delay);
+          continue;
+        }
+
+        throw error;
+      } catch (rawError) {
+        clearTimeout(timeout);
+        const error = normalizeError(rawError);
+
+        if (attempt < retries && (error.status === 0 || error.status === 408)) {
+          await wait(RETRY_BASE_DELAY_MS * Math.max(1, attempt + 1));
+          continue;
+        }
+
+        throw error;
       }
-
-      const requestId =
-        response.headers.get("X-Request-Id") || getPayloadRequestId(payload);
-      const error = new ApiError(
-        getPayloadMessage(payload, "Request failed"),
-        response.status,
-        payload,
-        requestId,
-        parseRetryAfterMs(response.headers.get("Retry-After"))
-      );
-
-      if (attempt < retries && shouldRetryStatus(error.status)) {
-        const delay =
-          error.retryAfterMs ?? RETRY_BASE_DELAY_MS * Math.max(1, attempt + 1);
-        await wait(delay);
-        continue;
-      }
-
-      throw error;
-    } catch (rawError) {
-      clearTimeout(timeout);
-      const error = normalizeError(rawError);
-
-      if (attempt < retries && (error.status === 0 || error.status === 408)) {
-        await wait(RETRY_BASE_DELAY_MS * Math.max(1, attempt + 1));
-        continue;
-      }
-
-      throw error;
     }
+
+    throw new ApiError("Request failed after retries", 0, null);
+  })();
+
+  if (cacheKey && cacheTtlMs > 0) {
+    pendingGetRequests.set(cacheKey, requestPromise as Promise<unknown>);
+    requestPromise.finally(() => {
+      pendingGetRequests.delete(cacheKey);
+    });
   }
 
-  throw new ApiError("Request failed after retries", 0, null);
+  return requestPromise;
 }
 
 export async function apiGet<T>(
