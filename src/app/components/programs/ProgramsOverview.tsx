@@ -31,7 +31,7 @@ export function ProgramsOverview() {
               className="space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed"
             >
               {[
-                "At CIED, we understand that every startup is unique and requires tailored support at different stages of growth. Our comprehensive programs are designed to provide the right resources, mentorship, and infrastructure at the right time.",
+                "At CIED, we understand that every startup is unique and requires tailored support at different stages of growth. Our comprehensive programs and schemes are designed to provide the right resources, mentorship, and infrastructure at the right time.",
                 "From ideation to scale-up, our structured approach ensures that entrepreneurs receive continuous guidance, access to industry experts, funding opportunities, and a collaborative ecosystem that accelerates growth and sustainability.",
                 "Whether you're a student with a groundbreaking idea, a researcher looking to commercialize innovation, or an early-stage startup seeking acceleration, CIED has a program tailored for you.",
               ].map((text, index) => (

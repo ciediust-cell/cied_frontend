@@ -85,7 +85,7 @@
       "dest": "/index.html"
     },
     {
-      "src": "^/(aboutUs|programs|portfolio|members|news|events|gallery|contactUs|coming-soon)/?$",
+      "src": "^/(aboutUs|programs|portfolio|members|news|events|workshops|facilities|gallery|contactUs|success-stories|recognition|coming-soon)/?$",
       "dest": "/index.html"
     },
     {

@@ -7,8 +7,32 @@ export interface PublicProgramListItem {
   duration: string;
   eligibility: string;
   icon: string | null;
+  bannerImage?: string | null;
   applyEnabled: boolean;
   applyUrl: string | null;
+}
+
+export interface PublicProgramDocument {
+  id: string;
+  title: string;
+  fileUrl: string;
+  publicId?: string | null;
+  order?: number;
+}
+
+export interface PublicProgramSuccessStory {
+  id: string;
+  participantName: string;
+  participantRole: string;
+  storyTitle: string;
+  successStory: string;
+  achievementHighlights: string;
+  startupOutcome: string;
+  testimonial?: string | null;
+  imageUrl?: string | null;
+  imagePublicId?: string | null;
+  order?: number;
+  isActive: boolean;
 }
 
 export interface PublicProgramDetail {
@@ -20,6 +44,7 @@ export interface PublicProgramDetail {
   duration: string;
   eligibility: string;
   icon: string | null;
+  bannerImage?: string | null;
   applyEnabled: boolean;
   applyUrl: string | null;
   highlights: Array<{ id: string; text: string }>;
@@ -28,12 +53,14 @@ export interface PublicProgramDetail {
     stepNumber: number;
     description: string;
   }>;
+  documents: PublicProgramDocument[];
+  successStories: PublicProgramSuccessStory[];
 }
 
 export async function getPublicPrograms() {
-  return apiGet<PublicProgramListItem[]>("/api/programs");
+  return apiGet<PublicProgramListItem[]>("/api/programs", { cacheTtlMs: 0 });
 }
 
 export async function getPublicProgramBySlug(slug: string) {
-  return apiGet<PublicProgramDetail>(`/api/programs/${slug}`);
+  return apiGet<PublicProgramDetail>(`/api/programs/${slug}`, { cacheTtlMs: 0 });
 }

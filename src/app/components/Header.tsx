@@ -15,6 +15,8 @@ const moreLinks = [
   { name: "Members", to: "/members" },
   { name: "Recognition", to: "/recognition" },
   { name: "Events", to: "/events" },
+  { name: "Workshops", to: "/workshops" },
+  { name: "Facilities", to: "/facilities" },
   { name: "Gallery", to: "/gallery" },
   { name: "Portfolio", to: "/portfolio" },
 ];

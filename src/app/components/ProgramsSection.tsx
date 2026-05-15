@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { getOptimizedCloudinaryUrl } from "src/helper/imageOptimization";
 import { getProgramIconConfig } from "src/helper/programIcons";
 import {
   getPublicPrograms,
@@ -40,7 +41,7 @@ export function ProgramsSection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-block px-4 py-2 bg-secondary/10 rounded-full mb-6">
-            <span className="text-sm text-secondary">Our Programs</span>
+            <span className="text-sm text-secondary">Programs & Schemes</span>
           </div>
 
           <motion.h2
@@ -86,16 +87,35 @@ export function ProgramsSection() {
                   className="group border-none shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
                 >
                   <CardContent className="p-8">
-                    <div className="flex items-start justify-between mb-4">
-                      <div
-                        className={`w-16 h-16 rounded-xl ${bgColor} flex items-center justify-center group-hover:scale-110 transition-transform`}
-                      >
-                        <Icon className={`h-8 w-8 ${color}`} />
+                    {program.bannerImage ? (
+                      <div className="mb-4 space-y-3">
+                        <img
+                          src={getOptimizedCloudinaryUrl(program.bannerImage, {
+                            width: 900,
+                            height: 420,
+                            crop: "fill",
+                            gravity: "auto",
+                          })}
+                          alt={program.title}
+                          className="w-full h-40 object-cover rounded-xl"
+                          loading="lazy"
+                        />
+                        <span className="inline-flex px-3 py-1 bg-muted rounded-full text-sm text-muted-foreground">
+                          {program.duration}
+                        </span>
                       </div>
-                      <span className="px-3 py-1 bg-muted rounded-full text-sm text-muted-foreground">
-                        {program.duration}
-                      </span>
-                    </div>
+                    ) : (
+                      <div className="flex items-start justify-between mb-4">
+                        <div
+                          className={`w-16 h-16 rounded-xl ${bgColor} flex items-center justify-center group-hover:scale-110 transition-transform`}
+                        >
+                          <Icon className={`h-8 w-8 ${color}`} />
+                        </div>
+                        <span className="px-3 py-1 bg-muted rounded-full text-sm text-muted-foreground">
+                          {program.duration}
+                        </span>
+                      </div>
+                    )}
 
                     <h3 className="text-2xl mb-3 text-primary">{program.title}</h3>
                     <p className="text-muted-foreground mb-6 leading-relaxed">

@@ -29,7 +29,7 @@ export function ProgramsHero() {
             transition={{ delay: 0.25, duration: 0.5, ease: "easeOut" as const }}
             className="text-3xl sm:text-4xl lg:text-6xl mb-4 sm:mb-6 text-primary leading-tight"
           >
-            Programs & Facilities
+            Programs & Schemes
           </motion.h1>
 
           {/* Subheading */}
@@ -39,8 +39,8 @@ export function ProgramsHero() {
             transition={{ delay: 0.35, duration: 0.5, ease: "easeOut" as const }}
             className="text-base sm:text-lg lg:text-2xl text-muted-foreground leading-relaxed max-w-3xl mx-auto px-2 sm:px-0"
           >
-            Structured programs designed to support startups at every stage of
-            their journey
+            Structured programs and schemes designed to support startups, students,
+            and innovators at every stage of their journey
           </motion.p>
         </motion.div>
       </div>

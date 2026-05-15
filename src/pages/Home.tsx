@@ -10,6 +10,11 @@ const ProgramsSection = lazy(() =>
     default: module.ProgramsSection,
   }))
 );
+const WorkshopsSection = lazy(() =>
+  import("../app/components/WorkshopsSection").then((module) => ({
+    default: module.WorkshopsSection,
+  }))
+);
 const GallerySection = lazy(() =>
   import("../app/components/GallerySection").then((module) => ({
     default: module.GallerySection,
@@ -18,6 +23,11 @@ const GallerySection = lazy(() =>
 const PartnersSection = lazy(() =>
   import("../app/components/PartnersSection").then((module) => ({
     default: module.PartnersSection,
+  }))
+);
+const CollaboratorsSection = lazy(() =>
+  import("../app/components/CollaboratorsSection").then((module) => ({
+    default: module.CollaboratorsSection,
   }))
 );
 const CTASection = lazy(() =>
@@ -67,6 +77,9 @@ export default function Home() {
         <KeyHighlights />
         <AboutSection />
         <NewsEvents />
+        <DeferredHomeSection minHeightClassName="min-h-[40rem]">
+          <WorkshopsSection />
+        </DeferredHomeSection>
         <DeferredHomeSection minHeightClassName="min-h-[38rem]">
           <ProgramsSection />
         </DeferredHomeSection>
@@ -75,6 +88,9 @@ export default function Home() {
         </DeferredHomeSection>
         <DeferredHomeSection minHeightClassName="min-h-[32rem]">
           <PartnersSection />
+        </DeferredHomeSection>
+        <DeferredHomeSection minHeightClassName="min-h-[44rem]">
+          <CollaboratorsSection />
         </DeferredHomeSection>
         <DeferredHomeSection minHeightClassName="min-h-[18rem]">
           <CTASection />

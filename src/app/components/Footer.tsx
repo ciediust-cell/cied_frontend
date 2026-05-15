@@ -103,6 +103,22 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  to="/workshops"
+                  className="text-white/70 hover:text-secondary transition-colors"
+                >
+                  Workshops
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/facilities"
+                  className="text-white/70 hover:text-secondary transition-colors"
+                >
+                  Facilities
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/portfolio"
                   className="text-white/70 hover:text-secondary transition-colors"
                 >
@@ -134,7 +150,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  to="/coming-soon"
+                  to="/success-stories"
                   className="text-white/70 hover:text-secondary transition-colors"
                 >
                   Success Stories

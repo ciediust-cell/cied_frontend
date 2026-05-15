@@ -33,6 +33,12 @@ export interface PublicPortfolioDetail {
   isActive: boolean;
   founders: Array<{ id: string; name: string }>;
   achievements: Array<{ id: string; text: string }>;
+  awardImages?: Array<{
+    id: string;
+    imageUrl: string;
+    caption: string | null;
+    order?: number;
+  }>;
 }
 
 interface PortfolioQuery {

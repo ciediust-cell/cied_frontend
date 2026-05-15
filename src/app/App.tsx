@@ -20,6 +20,16 @@ const ContactPage = lazy(() =>
 const EventsPage = lazy(() =>
   import("src/pages/EventsPage").then((module) => ({ default: module.EventsPage }))
 );
+const WorkshopsPage = lazy(() =>
+  import("src/pages/WorkshopsPage").then((module) => ({
+    default: module.WorkshopsPage,
+  }))
+);
+const FacilitiesPage = lazy(() =>
+  import("src/pages/FacilitiesPage").then((module) => ({
+    default: module.FacilitiesPage,
+  }))
+);
 const GalleryPage = lazy(() =>
   import("src/pages/GalleryPage").then((module) => ({ default: module.GalleryPage }))
 );
@@ -31,6 +41,11 @@ const NewsPage = lazy(() =>
 );
 const ProgramsPage = lazy(() =>
   import("src/pages/ProgramsPage").then((module) => ({ default: module.ProgramsPage }))
+);
+const SuccessStoriesPage = lazy(() =>
+  import("src/pages/SuccessStoriesPage").then((module) => ({
+    default: module.SuccessStoriesPage,
+  }))
 );
 const RecognitionPage = lazy(() =>
   import("src/pages/RecognitionPage").then((module) => ({
@@ -61,10 +76,13 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/news" element={<NewsPage />} />
             <Route path="/events" element={<EventsPage />} />
+            <Route path="/workshops" element={<WorkshopsPage />} />
+            <Route path="/facilities" element={<FacilitiesPage />} />
             <Route path="/aboutUs" element={<AboutPage />} />
             <Route path="/programs" element={<ProgramsPage />} />
             <Route path="/portfolio" element={<StartupPortfolioPage />} />
             <Route path="/members" element={<MembersPage />} />
+            <Route path="/success-stories" element={<SuccessStoriesPage />} />
             <Route path="/recognition" element={<RecognitionPage />} />
             <Route path="/contactUs" element={<ContactPage />} />
             <Route path="/gallery" element={<GalleryPage />} />

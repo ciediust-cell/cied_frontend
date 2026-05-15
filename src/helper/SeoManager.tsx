@@ -73,6 +73,13 @@ const ROUTE_SEO: Record<string, RouteSeo> = {
     canonicalPath: "/events",
     robots: "index,follow",
   },
+  "/workshops": {
+    title: "Workshops | CIED IUST",
+    description:
+      "Explore CIED workshops, training sessions, speaker-led sessions, and practical learning opportunities.",
+    canonicalPath: "/workshops",
+    robots: "index,follow",
+  },
   "/gallery": {
     title: "Gallery | CIED IUST",
     description:

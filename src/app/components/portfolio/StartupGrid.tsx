@@ -170,6 +170,7 @@ export function StartupGrid() {
     "Detailed profile will be available soon.";
   const activeFounders = selectedStartupDetail?.founders || [];
   const activeAchievements = selectedStartupDetail?.achievements || [];
+  const activeAwardImages = selectedStartupDetail?.awardImages || [];
   const activeWebsite = selectedStartupDetail?.websiteUrl;
 
   return (
@@ -421,6 +422,33 @@ export function StartupGrid() {
                         </ul>
                       )}
                     </div>
+
+                    {activeAwardImages.length > 0 && (
+                      <div>
+                        <h4 className="text-primary mb-3 flex items-center gap-2">
+                          <Award className="h-5 w-5" /> Achievement Gallery
+                        </h4>
+                        <div className="grid sm:grid-cols-2 gap-3">
+                          {activeAwardImages.map((image) => (
+                            <figure
+                              key={image.id}
+                              className="overflow-hidden rounded-xl border border-border bg-white"
+                            >
+                              <img
+                                src={image.imageUrl}
+                                alt={image.caption || `${activeName} achievement`}
+                                className="w-full aspect-video object-cover"
+                              />
+                              {image.caption && (
+                                <figcaption className="px-3 py-2 text-xs text-muted-foreground">
+                                  {image.caption}
+                                </figcaption>
+                              )}
+                            </figure>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
                     {activeWebsite && (
                       <a

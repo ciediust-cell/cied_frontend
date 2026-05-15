@@ -59,7 +59,9 @@ const toEventItem = (event: PublicEventItem): NewsItem => ({
   eventDate: event.eventDate,
   location: event.location ?? undefined,
   registrationUrl: event.registrationUrl ?? undefined,
-  images: [event.featuredImage || "/ciedLogo.jpeg"],
+  images: event.images?.length
+    ? event.images
+    : [event.featuredImage || "/ciedLogo.jpeg"],
 });
 
 export function EventsPage() {
@@ -156,8 +158,12 @@ export function EventsPage() {
           location: details.location ?? current.location,
           registrationUrl: details.registrationUrl ?? current.registrationUrl,
           images: details.featuredImage
-            ? [details.featuredImage]
-            : ["/ciedLogo.jpeg"],
+            ? details.images?.length
+              ? details.images
+              : [details.featuredImage]
+            : details.images?.length
+              ? details.images
+              : ["/ciedLogo.jpeg"],
         };
       });
     } catch {

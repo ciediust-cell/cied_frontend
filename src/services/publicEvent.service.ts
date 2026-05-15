@@ -6,6 +6,7 @@ export interface PublicEventItem {
   slug: string;
   description: string;
   featuredImage: string;
+  images?: string[];
   eventDate: string;
   location: string | null;
   registrationUrl: string | null;
@@ -16,9 +17,12 @@ export interface PublicEventItem {
 export async function getPublicEvents(type?: "upcoming" | "past") {
   return apiGet<PublicEventItem[]>("/api/events", {
     query: { type },
+    cacheTtlMs: 0,
   });
 }
 
 export async function getPublicEventBySlug(slug: string) {
-  return apiGet<PublicEventItem>(`/api/events/${slug}`);
+  return apiGet<PublicEventItem>(`/api/events/${slug}`, {
+    cacheTtlMs: 0,
+  });
 }
