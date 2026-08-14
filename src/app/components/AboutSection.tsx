@@ -43,8 +43,12 @@ export function AboutSection() {
                 <div>
                   <h4 className="mb-2 text-primary">Our Mission</h4>
                   <p className="text-sm text-muted-foreground">
-                    Empower innovators to build sustainable, scalable ventures
-                    that create lasting impact
+                    To nurture and accelerate startups through comprehensive
+                    incubation support, mentorship, infrastructure, and funding
+                    opportunities. We are committed to fostering an
+                    entrepreneurial culture within academia, bridging the gap
+                    between research and commercialization, and creating
+                    sustainable economic value for the region.
                   </p>
                 </div>
               </div>
@@ -56,8 +60,12 @@ export function AboutSection() {
                 <div>
                   <h4 className="mb-2 text-primary">Our Vision</h4>
                   <p className="text-sm text-muted-foreground">
-                    Be the catalyst for Kashmir's transformation into a thriving
-                    startup hub.
+                    To be a leading catalyst for innovation and entrepreneurship
+                    in Jammu & Kashmir, transforming the region into a vibrant
+                    startup ecosystem that competes nationally and globally. We
+                    envision CIED as the premier destination for aspiring
+                    entrepreneurs seeking to build scalable, sustainable, and
+                    socially impactful ventures.
                   </p>
                 </div>
               </div>
@@ -74,8 +82,8 @@ export function AboutSection() {
           <div className="relative">
             <div className="absolute -top-3 -left-3 sm:-top-6 sm:-left-6 w-full h-full border-4 border-secondary/20 rounded-2xl" />
             <img
-              src="https://cdn.jsdelivr.net/gh/ciediust-cell/cied_images/CIED_COMPRESSED/IMG_5542.jpg"
-              alt="IUST Campus"
+              src="/cied-new-building.jpeg"
+              alt="CIED IUST Innovation Campus building"
               className="relative rounded-2xl shadow-2xl w-full h-72 sm:h-[420px] lg:h-[500px] object-cover"
             />
             <div className="absolute -bottom-4 -right-4 sm:-bottom-8 sm:-right-8 bg-primary text-white p-4 sm:p-8 rounded-2xl shadow-xl">

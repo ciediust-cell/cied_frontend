@@ -120,11 +120,11 @@ export function MembersPage() {
 
                 {boardMessage ? (
                   <div className="border rounded-2xl bg-white p-6 sm:p-8 shadow-sm">
-                    <div className="max-w-4xl space-y-4">
+                    <div className="w-full space-y-4">
                       <p className="text-sm font-medium uppercase tracking-wide text-primary/80">
                         {boardMessage.title}
                       </p>
-                      <p className="text-base sm:text-lg leading-8 text-foreground">
+                      <p className="text-base sm:text-lg leading-8 text-foreground sm:text-justify">
                         {boardMessage.message}
                       </p>
                       {(boardMessage.authorName || boardMessage.authorDesignation) && (

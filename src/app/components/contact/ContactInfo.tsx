@@ -15,10 +15,9 @@ const contactInfo: ContactCard[] = [
     title: "Address",
     icon: <MapPin className="h-6 w-6" />,
     content: [
-      "CIED Incubation Centre",
-      "Islamic University of Science & Technology",
-      "Awantipora, Pulwama",
-      "Jammu & Kashmir 192122",
+      "Innovation Campus",
+      "IUST, Awantipora",
+      "J&K, 192122",
     ],
     link: "https://maps.google.com/?q=IUST+Awantipora",
     linkType: "map",
@@ -26,22 +25,15 @@ const contactInfo: ContactCard[] = [
   {
     title: "Email",
     icon: <Mail className="h-6 w-6" />,
-    content: [
-      "cied@iust.ac.in",
-      "incubation@iust.ac.in",
-      "info.cied@iust.ac.in",
-    ],
+    content: ["cied@iust.ac.in"],
     link: "mailto:cied@iust.ac.in",
     linkType: "email",
   },
   {
     title: "Phone",
     icon: <Phone className="h-6 w-6" />,
-    content: [
-      "Office Contact: +91 (01933) 247954",
-      "Mon to Fri, 9:00 AM to 5:00 PM",
-    ],
-    link: "tel:+911933247954",
+    content: ["1933 453 396"],
+    link: "tel:1933453396",
     linkType: "tel",
   },
 ];

@@ -1,10 +1,86 @@
+import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { CountUp } from "src/helper/CountUp";
 import { TypewriterHeading } from "src/helper/TypewriterHeading";
+import {
+  getPublicHomepageStats,
+  type PublicHomepageStat,
+} from "src/services/publicHomepageStats.service";
 import { Button } from "./ui/button";
 
+const fallbackStats: PublicHomepageStat[] = [
+  {
+    id: "startups_incubated",
+    key: "startups_incubated",
+    label: "Startups Incubated",
+    prefix: null,
+    value: 75,
+    decimals: 0,
+    suffix: "+",
+    order: 0,
+    isActive: true,
+  },
+  {
+    id: "funding_raised",
+    key: "funding_raised",
+    label: "Funding Raised",
+    prefix: "Rs. ",
+    value: 2.4,
+    decimals: 2,
+    suffix: " Cr",
+    order: 1,
+    isActive: true,
+  },
+  {
+    id: "mentors",
+    key: "mentors",
+    label: "Mentors",
+    prefix: null,
+    value: 50,
+    decimals: 0,
+    suffix: "+",
+    order: 2,
+    isActive: true,
+  },
+  {
+    id: "jobs_created",
+    key: "jobs_created",
+    label: "Jobs Created",
+    prefix: null,
+    value: 70,
+    decimals: 0,
+    suffix: "+",
+    order: 3,
+    isActive: true,
+  },
+];
+
+const statColorClasses = ["text-primary", "text-secondary", "text-accent", "text-primary"];
+
 export function HeroSection() {
+  const [stats, setStats] = useState<PublicHomepageStat[]>(fallbackStats);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadStats = async () => {
+      try {
+        const response = await getPublicHomepageStats();
+        if (cancelled || response.length === 0) return;
+        setStats(response);
+      } catch {
+        // Keep fallback homepage stats when the CMS endpoint is unavailable.
+      }
+    };
+
+    void loadStats();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <section className="relative min-h-[100svh] flex items-center justify-center pt-16 sm:pt-20 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5">
@@ -50,41 +126,23 @@ export function HeroSection() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-6 mt-14 sm:mt-20 pt-8 sm:pt-10 border-t border-border">
-            <div className="text-center">
-              <div className="text-[1.65rem] sm:text-[2.5rem] lg:text-[3rem] font-extrabold text-primary mb-1 whitespace-nowrap">
-                <CountUp value={75} suffix="+" />
+            {stats.map((stat, index) => (
+              <div className="text-center" key={stat.id || stat.key}>
+                <div
+                  className={`text-[1.65rem] sm:text-[2.5rem] lg:text-[3rem] font-extrabold ${statColorClasses[index % statColorClasses.length]} mb-1 whitespace-nowrap`}
+                >
+                  {stat.prefix}
+                  <CountUp
+                    value={stat.value}
+                    decimals={stat.decimals}
+                    suffix={stat.suffix || ""}
+                  />
+                </div>
+                <div className="text-xs sm:text-sm text-muted-foreground">
+                  {stat.label}
+                </div>
               </div>
-              <div className="text-xs sm:text-sm text-muted-foreground">
-                Startups Incubated
-              </div>
-            </div>
-
-            <div className="text-center">
-              <div className="text-[1.65rem] sm:text-[2.5rem] lg:text-[3rem] font-extrabold text-secondary mb-1 whitespace-nowrap">
-                Rs. <CountUp value={2.4} decimals={2} suffix=" Cr" />
-              </div>
-              <div className="text-xs sm:text-sm text-muted-foreground">
-                Funding Raised
-              </div>
-            </div>
-
-            <div className="text-center">
-              <div className="text-[1.65rem] sm:text-[2.5rem] lg:text-[3rem] font-extrabold text-accent mb-1 whitespace-nowrap">
-                <CountUp value={50} suffix="+" />
-              </div>
-              <div className="text-xs sm:text-sm text-muted-foreground">
-                Mentors
-              </div>
-            </div>
-
-            <div className="text-center">
-              <div className="text-[1.65rem] sm:text-[2.5rem] lg:text-[3rem] font-extrabold text-primary mb-1 whitespace-nowrap">
-                <CountUp value={70} suffix="+" />
-              </div>
-              <div className="text-xs sm:text-sm text-muted-foreground">
-                Jobs Created
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
