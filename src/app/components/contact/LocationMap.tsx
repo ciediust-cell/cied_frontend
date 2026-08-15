@@ -74,7 +74,7 @@ export function LocationMap() {
             transition={{ delay: 0.2 }}
             className="text-center text-xs sm:text-sm text-muted-foreground mt-5 sm:mt-6"
           >
-            Innovation Hub, IUST, Awantipora, Pulwama, Jammu & Kashmir 192122
+            Innovation Campus, IUST, Awantipora, J&K, 192122
           </motion.p>
         </div>
       </div>

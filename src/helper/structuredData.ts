@@ -45,10 +45,9 @@ const getSiteBase = () => {
 
 const DEFAULT_EVENT_ADDRESS = {
   "@type": "PostalAddress",
-  streetAddress:
-    "Centre for Innovation and Entrepreneurship Development, Islamic University of Science and Technology",
+  streetAddress: "Innovation Campus, IUST",
   addressLocality: "Awantipora",
-  addressRegion: "Jammu and Kashmir",
+  addressRegion: "J&K",
   postalCode: "192122",
   addressCountry: "IN",
 };
@@ -65,7 +64,7 @@ export const buildOrganizationJsonLd = () => {
     url: base,
     logo: toAbsoluteUrl("/ciedLogo.jpeg"),
     email: "cied@iust.ac.in",
-    telephone: "+91-1933-247954",
+    telephone: "1933 453 396",
     address: DEFAULT_EVENT_ADDRESS,
     sameAs: [
       "https://www.instagram.com/cied_iust/",
@@ -75,7 +74,7 @@ export const buildOrganizationJsonLd = () => {
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer support",
-      telephone: "+91-1933-247954",
+      telephone: "1933 453 396",
       email: "cied@iust.ac.in",
       areaServed: "IN",
       availableLanguage: ["en"],

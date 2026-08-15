@@ -174,17 +174,16 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="h-5 w-5 text-secondary mt-0.5 flex-shrink-0" />
                 <span className="text-white/70">
-                  Islamic University of Science & Technology, Awantipora,
-                  Kashmir
+                  Innovation Campus, IUST, Awantipora, J&K, 192122
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-secondary flex-shrink-0" />
                 <a
-                  href="tel:+911933247954"
+                  href="tel:1933453396"
                   className="text-white/70 hover:text-secondary transition-colors"
                 >
-                  Office Contact: +91 (01933) 247954
+                  1933 453 396
                 </a>
               </li>
               <li className="flex items-center gap-3">
