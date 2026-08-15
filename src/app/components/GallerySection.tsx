@@ -46,7 +46,7 @@ export function GallerySection() {
         setLoading(true);
         setError("");
 
-        const galleries = await getPublicGalleries();
+        const galleries = await getPublicGalleries(undefined, 6);
         const mapped = galleries
           .filter((gallery) => Boolean(gallery.coverImage?.imageUrl))
           .map((gallery) => ({

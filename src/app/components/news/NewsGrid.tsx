@@ -2,6 +2,10 @@ import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Calendar, MapPin, ArrowRight } from "lucide-react";
 import type { NewsItem } from "src/types/news";
+import {
+  buildResponsiveCloudinarySrcSet,
+  getOptimizedCloudinaryUrl,
+} from "src/helper/imageOptimization";
 
 interface NewsGridProps {
   items: NewsItem[];
@@ -38,7 +42,7 @@ export function NewsGrid({ items, onItemClick }: NewsGridProps) {
     <section className="py-8 sm:py-12 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {items.map((item) => (
+          {items.map((item, index) => (
             <Card
               key={item.id}
               className="group border border-border rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col h-full"
@@ -47,8 +51,28 @@ export function NewsGrid({ items, onItemClick }: NewsGridProps) {
               {/* IMAGE */}
               <div className="relative h-48 sm:h-56 overflow-hidden">
                 <img
-                  src={item.images[0]}
+                  src={getOptimizedCloudinaryUrl(item.images[0], {
+                    width: 640,
+                    height: 400,
+                    crop: "fill",
+                    gravity: "auto",
+                    quality: "auto:eco",
+                  })}
+                  srcSet={buildResponsiveCloudinarySrcSet(
+                    item.images[0],
+                    [240, 320, 480, 640, 800],
+                    {
+                      crop: "fill",
+                      gravity: "auto",
+                      aspectRatio: 8 / 5,
+                      quality: "auto:eco",
+                    }
+                  )}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   alt={item.title}
+                  loading={index < 4 ? "eager" : "lazy"}
+                  fetchPriority={index < 4 ? "high" : "auto"}
+                  decoding="async"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute top-2 sm:top-3 left-2 sm:left-3">

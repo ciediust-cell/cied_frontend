@@ -17,12 +17,9 @@ export interface PublicEventItem {
 export async function getPublicEvents(type?: "upcoming" | "past") {
   return apiGet<PublicEventItem[]>("/api/events", {
     query: { type },
-    cacheTtlMs: 0,
   });
 }
 
 export async function getPublicEventBySlug(slug: string) {
-  return apiGet<PublicEventItem>(`/api/events/${slug}`, {
-    cacheTtlMs: 0,
-  });
+  return apiGet<PublicEventItem>(`/api/events/${slug}`);
 }

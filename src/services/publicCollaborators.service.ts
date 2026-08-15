@@ -11,7 +11,5 @@ export interface PublicCollaborator {
 }
 
 export async function getPublicCollaborators() {
-  return apiGet<PublicCollaborator[]>("/api/collaborators", {
-    cacheTtlMs: 0,
-  });
+  return apiGet<PublicCollaborator[]>("/api/collaborators");
 }

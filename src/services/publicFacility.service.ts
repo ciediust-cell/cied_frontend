@@ -21,13 +21,9 @@ export interface PublicFacilityItem {
 }
 
 export async function getPublicFacilities() {
-  return apiGet<PublicFacilityItem[]>("/api/facilities", {
-    cacheTtlMs: 0,
-  });
+  return apiGet<PublicFacilityItem[]>("/api/facilities");
 }
 
 export async function getPublicFacilityBySlug(slug: string) {
-  return apiGet<PublicFacilityItem>(`/api/facilities/${slug}`, {
-    cacheTtlMs: 0,
-  });
+  return apiGet<PublicFacilityItem>(`/api/facilities/${slug}`);
 }

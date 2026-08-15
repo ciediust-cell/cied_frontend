@@ -26,13 +26,9 @@ export interface PublicWorkshopItem {
 }
 
 export async function getPublicWorkshops() {
-  return apiGet<PublicWorkshopItem[]>("/api/workshops", {
-    cacheTtlMs: 0,
-  });
+  return apiGet<PublicWorkshopItem[]>("/api/workshops");
 }
 
 export async function getPublicWorkshopBySlug(slug: string) {
-  return apiGet<PublicWorkshopItem>(`/api/workshops/${slug}`, {
-    cacheTtlMs: 0,
-  });
+  return apiGet<PublicWorkshopItem>(`/api/workshops/${slug}`);
 }

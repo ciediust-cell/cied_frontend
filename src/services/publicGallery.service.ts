@@ -12,10 +12,7 @@ export type PublicGalleryCategory =
 export interface PublicGalleryImage {
   id: string;
   imageUrl: string;
-  publicId: string;
   caption: string | null;
-  galleryId: string;
-  createdAt: string;
 }
 
 export interface PublicGalleryListItem {
@@ -40,9 +37,35 @@ export interface PublicGalleryDetail {
   images: PublicGalleryImage[];
 }
 
-export async function getPublicGalleries(newsSlug?: string) {
+export interface PublicGalleryPhoto {
+  id: string;
+  galleryId: string;
+  imageUrl: string;
+  caption: string | null;
+  galleryTitle: string;
+  gallerySubtitle: string;
+  category: PublicGalleryCategory;
+}
+
+export interface PublicGalleryPhotosPage {
+  items: PublicGalleryPhoto[];
+  nextCursor: string | null;
+  hasNextPage: boolean;
+}
+
+export async function getPublicGalleries(newsSlug?: string, limit?: number) {
   return apiGet<PublicGalleryListItem[]>("/api/gallery", {
-    query: { newsSlug },
+    query: { newsSlug, limit },
+  });
+}
+
+export async function getPublicGalleryPhotos(params: {
+  category?: PublicGalleryCategory;
+  cursor?: string;
+  limit?: number;
+}) {
+  return apiGet<PublicGalleryPhotosPage>("/api/gallery/photos", {
+    query: params,
   });
 }
 

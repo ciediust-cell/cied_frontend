@@ -2,6 +2,10 @@ import { Card, CardContent } from "../ui/card";
 import { Button } from "../ui/button";
 import { Calendar, MapPin, ArrowRight } from "lucide-react";
 import type { NewsItem } from "src/types/news";
+import {
+  buildResponsiveCloudinarySrcSet,
+  getOptimizedCloudinaryUrl,
+} from "src/helper/imageOptimization";
 
 interface FeaturedCardProps {
   item: NewsItem;
@@ -48,8 +52,28 @@ export function FeaturedCard({
               } overflow-hidden`}
             >
               <img
-                src={item.images[0]}
+                src={getOptimizedCloudinaryUrl(item.images[0], {
+                  width: 960,
+                  height: 720,
+                  crop: "fill",
+                  gravity: "auto",
+                  quality: "auto:eco",
+                })}
+                srcSet={buildResponsiveCloudinarySrcSet(
+                  item.images[0],
+                  [480, 640, 800, 960, 1200],
+                  {
+                    crop: "fill",
+                    gravity: "auto",
+                    aspectRatio: 4 / 3,
+                    quality: "auto:eco",
+                  }
+                )}
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 alt={item.title}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute top-3 left-3 sm:top-4 sm:left-4">

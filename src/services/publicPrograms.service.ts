@@ -58,9 +58,9 @@ export interface PublicProgramDetail {
 }
 
 export async function getPublicPrograms() {
-  return apiGet<PublicProgramListItem[]>("/api/programs", { cacheTtlMs: 0 });
+  return apiGet<PublicProgramListItem[]>("/api/programs");
 }
 
 export async function getPublicProgramBySlug(slug: string) {
-  return apiGet<PublicProgramDetail>(`/api/programs/${slug}`, { cacheTtlMs: 0 });
+  return apiGet<PublicProgramDetail>(`/api/programs/${slug}`);
 }

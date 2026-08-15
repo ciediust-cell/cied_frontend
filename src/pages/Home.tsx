@@ -1,9 +1,14 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { AboutSection } from "../app/components/AboutSection";
 import { HeroSection } from "../app/components/HeroSection";
 import { KeyHighlights } from "../app/components/KeyHighlights";
 import { NewsEvents } from "../app/components/NewsEvents";
 import { useInViewOnce } from "../helper/useInViewOnce";
+import {
+  DEFAULT_HOMEPAGE_STATS,
+  getPublicHomepageStats,
+  type PublicHomepageStat,
+} from "../services/publicHomepageStats.service";
 
 const ProgramsSection = lazy(() =>
   import("../app/components/ProgramsSection").then((module) => ({
@@ -70,11 +75,33 @@ function DeferredHomeSection({
 }
 
 export default function Home() {
+  const [stats, setStats] = useState<PublicHomepageStat[]>(DEFAULT_HOMEPAGE_STATS);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadStats = async () => {
+      try {
+        const response = await getPublicHomepageStats();
+        if (cancelled || response.length === 0) return;
+        setStats(response);
+      } catch {
+        // Keep default homepage stats when the CMS endpoint is unavailable.
+      }
+    };
+
+    void loadStats();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <div className="min-h-screen">
       <main>
-        <HeroSection />
-        <KeyHighlights />
+        <HeroSection stats={stats} />
+        <KeyHighlights stats={stats} />
         <AboutSection />
         <NewsEvents />
         <DeferredHomeSection minHeightClassName="min-h-[40rem]">

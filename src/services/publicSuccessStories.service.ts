@@ -11,5 +11,5 @@ export interface PublicSuccessStoryItem extends PublicProgramSuccessStory {
 }
 
 export async function getPublicSuccessStories() {
-  return apiGet<PublicSuccessStoryItem[]>("/api/success-stories", { cacheTtlMs: 0 });
+  return apiGet<PublicSuccessStoryItem[]>("/api/success-stories");
 }

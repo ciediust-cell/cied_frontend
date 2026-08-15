@@ -6,9 +6,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "react-router-dom";
 import {
   getPublicGalleries,
+  getPublicGalleryPhotos,
   type PublicGalleryCategory,
   type PublicGalleryImage,
   type PublicGalleryListItem,
+  type PublicGalleryPhoto,
 } from "src/services/publicGallery.service";
 
 type GalleryDisplayCategory =
@@ -32,6 +34,7 @@ export interface GalleryItem {
 }
 
 const INITIAL_ITEMS_TO_SHOW = 12;
+const PHOTOS_PAGE_SIZE = 12;
 
 const CATEGORY_LABELS: Record<PublicGalleryCategory, GalleryCategory> = {
   EVENTS: "Events & Workshops",
@@ -42,6 +45,18 @@ const CATEGORY_LABELS: Record<PublicGalleryCategory, GalleryCategory> = {
   INFRASTRUCTURE: "Infrastructure",
   OTHER: "Other",
 };
+
+// Fixed chip list (not derived from loaded data): the full gallery page now
+// loads photos one page at a time, so a category that only appears on a
+// later page must still show up as a filterable chip immediately.
+const CATEGORY_CHIPS: GalleryCategory[] = [
+  "All",
+  ...Object.values(CATEGORY_LABELS),
+];
+
+const LABEL_TO_API_CATEGORY = Object.fromEntries(
+  Object.entries(CATEGORY_LABELS).map(([apiValue, label]) => [label, apiValue])
+) as Record<GalleryDisplayCategory | "Other", PublicGalleryCategory>;
 
 const mapCategory = (category: PublicGalleryCategory): GalleryCategory =>
   CATEGORY_LABELS[category] ?? "Other";
@@ -59,18 +74,40 @@ const toGalleryItem = (
   type: "image",
 });
 
+const toPhotoItem = (photo: PublicGalleryPhoto): GalleryItem => ({
+  id: photo.id,
+  galleryId: photo.galleryId,
+  imageUrl: photo.imageUrl,
+  title: photo.caption?.trim() || photo.galleryTitle,
+  category: mapCategory(photo.category),
+  description: photo.gallerySubtitle?.trim() || undefined,
+  type: "image",
+});
+
 export function GalleryContent() {
   const [searchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] =
     useState<GalleryCategory>("All");
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
-  const [galleries, setGalleries] = useState<PublicGalleryListItem[]>([]);
-  const [itemsToShow, setItemsToShow] = useState(INITIAL_ITEMS_TO_SHOW);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadingMore, setLoadingMore] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const newsSlugFilter = searchParams.get("newsSlug")?.trim() || "";
 
+  // Single-gallery view (linked from a news article): small, unpaginated,
+  // unchanged from the original implementation.
+  const [legacyGalleries, setLegacyGalleries] = useState<
+    PublicGalleryListItem[]
+  >([]);
+  const [itemsToShow, setItemsToShow] = useState(INITIAL_ITEMS_TO_SHOW);
+
+  // Full gallery browse view: server-paginated, server-filtered.
+  const [photos, setPhotos] = useState<GalleryItem[]>([]);
+  const [cursor, setCursor] = useState<string | null>(null);
+  const [hasNextPage, setHasNextPage] = useState<boolean>(false);
+
   useEffect(() => {
+    if (!newsSlugFilter) return;
     let isCancelled = false;
 
     const loadGallery = async () => {
@@ -78,16 +115,16 @@ export function GalleryContent() {
         setLoading(true);
         setError("");
 
-        const galleryList = await getPublicGalleries(newsSlugFilter || undefined);
+        const galleryList = await getPublicGalleries(newsSlugFilter);
 
         if (!isCancelled) {
-          setGalleries(galleryList);
+          setLegacyGalleries(galleryList);
           setLoading(false);
         }
       } catch {
         if (!isCancelled) {
           setError("Failed to load gallery. Please try again.");
-          setGalleries([]);
+          setLegacyGalleries([]);
           setLoading(false);
         }
       }
@@ -100,8 +137,52 @@ export function GalleryContent() {
     };
   }, [newsSlugFilter]);
 
-  const galleryItems = useMemo<GalleryItem[]>(() => {
-    return galleries.flatMap((gallery) => {
+  useEffect(() => {
+    if (newsSlugFilter) return;
+    let isCancelled = false;
+
+    const loadFirstPage = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const category =
+          selectedCategory === "All"
+            ? undefined
+            : LABEL_TO_API_CATEGORY[selectedCategory];
+        const page = await getPublicGalleryPhotos({
+          category,
+          limit: PHOTOS_PAGE_SIZE,
+        });
+
+        if (!isCancelled) {
+          setPhotos(page.items.map(toPhotoItem));
+          setCursor(page.nextCursor);
+          setHasNextPage(page.hasNextPage);
+        }
+      } catch {
+        if (!isCancelled) {
+          setError("Failed to load gallery. Please try again.");
+          setPhotos([]);
+          setCursor(null);
+          setHasNextPage(false);
+        }
+      } finally {
+        if (!isCancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    void loadFirstPage();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [selectedCategory, newsSlugFilter]);
+
+  const legacyGalleryItems = useMemo<GalleryItem[]>(() => {
+    return legacyGalleries.flatMap((gallery) => {
       const images =
         gallery.images.length > 0
           ? gallery.images
@@ -111,44 +192,69 @@ export function GalleryContent() {
 
       return images.map((image) => toGalleryItem(gallery, image));
     });
-  }, [galleries]);
+  }, [legacyGalleries]);
 
-  const categories = useMemo<GalleryCategory[]>(() => {
-    const unique = Array.from(
-      new Set(galleryItems.map((item) => item.category).filter(Boolean))
-    ) as GalleryCategory[];
-
-    return ["All", ...unique];
-  }, [galleryItems]);
-
-  useEffect(() => {
-    if (selectedCategory !== "All" && !categories.includes(selectedCategory)) {
-      setSelectedCategory("All");
-    }
-  }, [categories, selectedCategory]);
-
-  // Filter images based on selected category
-  const filteredItems = useMemo(() => {
+  const legacyFilteredItems = useMemo(() => {
     if (selectedCategory === "All") {
-      return galleryItems;
+      return legacyGalleryItems;
     }
-    return galleryItems.filter((item) => item.category === selectedCategory);
-  }, [galleryItems, selectedCategory]);
+    return legacyGalleryItems.filter(
+      (item) => item.category === selectedCategory
+    );
+  }, [legacyGalleryItems, selectedCategory]);
+
+  const isNewsSlugMode = Boolean(newsSlugFilter);
+
+  const displayedItems = isNewsSlugMode
+    ? legacyFilteredItems.slice(0, itemsToShow)
+    : photos;
+
+  const filteredItemsForLightbox = isNewsSlugMode
+    ? legacyFilteredItems
+    : photos;
+
+  const canLoadMore = isNewsSlugMode
+    ? displayedItems.length < legacyFilteredItems.length
+    : hasNextPage;
 
   useEffect(() => {
     if (
       selectedImage &&
-      !filteredItems.some((item) => item.id === selectedImage.id)
+      !filteredItemsForLightbox.some((item) => item.id === selectedImage.id)
     ) {
       setSelectedImage(null);
     }
-  }, [filteredItems, selectedImage]);
+  }, [filteredItemsForLightbox, selectedImage]);
 
-  // Slice items based on itemsToShow
-  const displayedItems = filteredItems.slice(0, itemsToShow);
+  const handleLoadMore = async () => {
+    if (isNewsSlugMode) {
+      setItemsToShow((prev) => prev + 6);
+      return;
+    }
 
-  const handleLoadMore = () => {
-    setItemsToShow((prev) => prev + 6);
+    if (!cursor || loadingMore) return;
+
+    setLoadingMore(true);
+    try {
+      const category =
+        selectedCategory === "All"
+          ? undefined
+          : LABEL_TO_API_CATEGORY[selectedCategory];
+      const page = await getPublicGalleryPhotos({
+        category,
+        cursor,
+        limit: PHOTOS_PAGE_SIZE,
+      });
+
+      setPhotos((prev) => [...prev, ...page.items.map(toPhotoItem)]);
+      setCursor(page.nextCursor);
+      setHasNextPage(page.hasNextPage);
+    } catch {
+      // Keep whatever is already loaded; the Load More button simply
+      // stays available so the user can retry.
+    } finally {
+      setLoadingMore(false);
+    }
   };
 
   return (
@@ -173,7 +279,7 @@ export function GalleryContent() {
                 transition={{ duration: 0.45, ease: "easeOut" as const }}
               >
                 <GalleryFilter
-                  categories={categories}
+                  categories={CATEGORY_CHIPS}
                   selectedCategory={selectedCategory}
                   onCategoryChange={(category) => {
                     setSelectedCategory(category);
@@ -196,7 +302,7 @@ export function GalleryContent() {
               </motion.div>
 
               <AnimatePresence>
-                {displayedItems.length < filteredItems.length && (
+                {canLoadMore && (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -206,9 +312,10 @@ export function GalleryContent() {
                   >
                     <button
                       onClick={handleLoadMore}
-                      className="px-7 sm:px-8 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                      disabled={loadingMore}
+                      className="px-7 sm:px-8 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-60"
                     >
-                      Load More
+                      {loadingMore ? "Loading..." : "Load More"}
                     </button>
                   </motion.div>
                 )}
@@ -218,12 +325,13 @@ export function GalleryContent() {
         </div>
       </section>
 
-      {/* Lightbox */}
+      {/* Lightbox — navigation is limited to currently loaded items; it does
+          not trigger a background fetch of the next page. */}
       <AnimatePresence>
         {selectedImage && (
           <GalleryLightbox
             item={selectedImage}
-            allItems={filteredItems}
+            allItems={filteredItemsForLightbox}
             onClose={() => setSelectedImage(null)}
             onNavigate={setSelectedImage}
           />
@@ -232,4 +340,3 @@ export function GalleryContent() {
     </>
   );
 }
-
